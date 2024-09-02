@@ -5,12 +5,15 @@ services:
     image: tianon/true
     networks:
       unifi:
+    volumes:
+      - unifi-db-data:/mnt/unifi-db-data
+      - unifi-app-config:/mnt/unifi-app-config
+networks:
+  unifi:
+    name: unifi
+    driver: bridge
 volumes:
   unifi-db-data:
     name: unifi-db-data
   unifi-app-config:
     name: unifi-app-config
-networks:
-  unifi:
-    name: unifi
-    driver: bridge
