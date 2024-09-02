@@ -1,0 +1,31 @@
+name: mongo
+services:
+  mongo:
+    image: mongo:7
+    hostname: mongo
+    container_name: mongo
+    restart: unless-stopped
+    ports:
+      - ${MONGO_PORT:-27017}:27017
+    volumes:
+      - ${MONGO_DATA_VOL:-/data/mongo}:/data/db
+      # mount scripts
+      - ./scripts/init.js:/docker-entrypoint-initdb.d/init.js:ro
+    environment:
+      # root
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:?}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-admin}
+      # user created by script
+      INIT_SCRIPT_USERNAME: ${INIT_SCRIPT_USERNAME:-user}
+      INIT_SCRIPT_PASSWORD: ${INIT_SCRIPT_PASSWORD:?}
+      INIT_SCRIPT_DATABASE: ${INIT_SCRIPT_DATABASE:?}
+    command:
+      # Limit the wired tiger cache size to 256MB
+      - --wiredTigerCacheSizeGB
+      - ${MONGO_WIRED_TIGER_CACHE_SIZE:-0.25}
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512mb
