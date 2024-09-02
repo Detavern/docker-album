@@ -28,7 +28,7 @@ services:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 10s
-      retries: 5
+      retries: 3
       start_period: 30s
     deploy:
       resources:
