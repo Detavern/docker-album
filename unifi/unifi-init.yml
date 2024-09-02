@@ -1,0 +1,12 @@
+name: unifi-init
+services:
+  init:
+    container_name: unifi-init
+    image: tianon/true
+    networks:
+      unifi:
+volumes:
+  unifi-db-data:
+  unifi-app-config:
+networks:
+  unifi:
