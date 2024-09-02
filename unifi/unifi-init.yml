@@ -12,6 +12,8 @@ networks:
   unifi:
     name: unifi
     driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: docker-unifi
 volumes:
   unifi-db-data:
     name: unifi-db-data
