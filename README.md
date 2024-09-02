@@ -4,4 +4,4 @@ Some useful docker-compose collections.
 
 ## HOW TO USE
 
-Create `.env` file by example.
+Create and update `.env` file from `env.required` or `env.full` in each folder.
