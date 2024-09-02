@@ -1,0 +1,21 @@
+name: postgres
+services:
+  postgres:
+    image: postgres:16
+    hostname: postgres
+    container_name: postgres
+    restart: unless-stopped
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    ports:
+      - ${POSTGRES_PORT:-5432}:5432
+    volumes:
+      - ${POSTGRES_DATA_DIR:-/data/postgres}:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512mb

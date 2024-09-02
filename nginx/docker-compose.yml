@@ -1,0 +1,17 @@
+name: nginx
+services:
+  nginx:
+    image: nginx:latest
+    hostname: nginx
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ${NGINX_CONF_FILE:-/etc/nginx.conf}:/etc/nginx.conf
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512mb
