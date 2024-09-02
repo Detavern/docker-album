@@ -12,7 +12,7 @@ services:
       - ${RABBITMQ_DATA_DIR:-/data/rabbitmq}:/var/lib/rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-root}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:?error}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:?}
     deploy:
       resources:
         limits:
