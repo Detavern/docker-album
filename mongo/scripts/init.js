@@ -1,8 +1,8 @@
 db.auth("${MONGO_INITDB_ROOT_USERNAME}", "${MONGO_INITDB_ROOT_PASSWORD}")
 db.createUser({
-  user: "${MONGO_USER}",
-  pwd: "${MONGO_PASS}",
+  user: "${INIT_SCRIPT_USERNAME}",
+  pwd: "${INIT_SCRIPT_PASSWORD}",
   roles: [
-    { db: "${MONGO_DBNAME}", role: "dbOwner" },
+    { db: "${INIT_SCRIPT_DATABASE}", role: "dbOwner" },
   ]
 })
