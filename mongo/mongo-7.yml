@@ -24,6 +24,12 @@ services:
       # Limit the wired tiger cache size to 256MB
       - --wiredTigerCacheSizeGB
       - ${MONGO_WIRED_TIGER_CACHE_SIZE:-0.25}
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     deploy:
       resources:
         limits:
