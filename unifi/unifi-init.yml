@@ -7,6 +7,10 @@ services:
       unifi:
 volumes:
   unifi-db-data:
+    name: unifi-db-data
   unifi-app-config:
+    name: unifi-app-config
 networks:
   unifi:
+    name: unifi
+    driver: bridge
