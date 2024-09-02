@@ -10,7 +10,7 @@ services:
     volumes:
       - ${MONGO_DATA_VOL:-/data/mongo}:/data/db
       # mount scripts
-      - ./scripts/init.js:/docker-entrypoint-initdb.d/init.js:ro
+      - ./scripts/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
     environment:
       # root
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
