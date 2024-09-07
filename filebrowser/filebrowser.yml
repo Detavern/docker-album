@@ -8,7 +8,8 @@ services:
     ports:
       - 80:80
     volumes:
-      - ${FILE_BROWSER_SRV_DIR:-/data/filebrowser}:/srv
+      - ${FILE_BROWSER_SRV_DIR:-/data/filebrowser/srv}:/srv
+      - ${FILE_BROWSER_CONFIG_DB:-/data/filebrowser/config/filebrowser.db}:/database.db
     deploy:
       resources:
         limits:
