@@ -1,0 +1,12 @@
+# Global options
+{
+	email cherry.hypernet@gmail.com
+	acme_dns cloudflare {env.CADDY_CF_API_TOKEN}
+	# use zerossl
+	acme_ca https://acme.zerossl.com/v2/DV90
+}
+
+# site
+example.com {
+	reverse_proxy backend-container
+}
