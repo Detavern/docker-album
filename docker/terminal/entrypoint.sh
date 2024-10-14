@@ -8,6 +8,12 @@ if [ ! -f "${FIRST_RUN}" ]; then
     # init tz
     ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime
 
+    # init locale
+    sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen
+    locale-gen
+    rm /etc/ssh/ssh_host_*
+    dpkg-reconfigure openssh-server || true
+
     # init password
     if [ -z "${ROOT_PASSWORD}" ]; then
         echo "root password not found."
