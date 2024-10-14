@@ -2,6 +2,8 @@ name: caddy
 services:
   caddy:
     image: caddy:2.8
+    hostname: caddy
+    container_name: caddy
     restart: unless-stopped
     ports:
       - "80:80"

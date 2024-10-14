@@ -1,0 +1,12 @@
+name: terminal
+services:
+  terminal:
+    image: ghcr.io/detavern/terminal:latest
+    hostname: terminal
+    container_name: terminal
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ~/.ssh:${ROOT_PUBKEY_DIR:-/data/pubkey}
+    environment:
+      ROOT_PUBKEY_DIR: ${ROOT_PUBKEY_DIR:-/data/pubkey}
