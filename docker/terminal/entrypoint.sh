@@ -22,6 +22,9 @@ if [ ! -f "${FIRST_RUN}" ]; then
     fi
     echo "root:${ROOT_PASSWORD}" | chpasswd
 
+    # init motd
+    sed -i "s/^#\?\(PrintMotd\) .*/\1 yes/" /etc/ssh/sshd_config
+
     # init port
     sed -i "s/^#\?\(Port\) .*/\1 ${SSH_PORT}/" /etc/ssh/sshd_config
 
@@ -38,7 +41,7 @@ if [ ! -f "${FIRST_RUN}" ]; then
         exit 1
     fi
 
-    KEYS=$(grep -ERxh '^ssh-.*$' --include='*.pub' ${ROOT_PUBKEY_DIR} || echo "empty")
+    KEYS=$(grep -ERxh 'ssh-.*' --include='*.pub' ${ROOT_PUBKEY_DIR} || echo "empty")
     if [[ "$KEYS" != "empty" ]]; then
         COUNT=$(echo "${KEYS}" | wc -l)
         echo "${COUNT} key(s) found"
