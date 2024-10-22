@@ -7,6 +7,16 @@ services:
     restart: unless-stopped
     networks:
       unifi:
+    ports:
+      - 3478:3478/udp
+      - 5514:5514/udp
+      - 6789:6789
+      - 8080:8080
+      - 8843:8843
+      - 8443:8443
+      # login page
+      - 8880:8880/tcp
+      - 10001:10001/udp
     volumes:
       - unifi-app-config:/config
     environment:
@@ -23,16 +33,6 @@ services:
       # java memory limit
       - MEM_STARTUP=256
       - MEM_LIMIT=1024
-    ports:
-      - 3478:3478/udp
-      - 5514:5514/udp
-      - 6789:6789
-      - 8080:8080
-      - 8843:8843
-      - 8443:8443
-      # login page
-      - 8880:8880/tcp
-      - 10001:10001/udp
     deploy:
       resources:
         limits:
