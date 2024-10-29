@@ -1,0 +1,21 @@
+name: metrics-init
+services:
+  init:
+    container_name: metrics-init
+    image: tianon/true
+    networks:
+      metrics: null
+    volumes:
+      - metrics-prometheus-data:/mnt/metrics-prometheus-data
+      - metrics-grafana-data:/mnt/metrics-grafana-data
+networks:
+  metrics:
+    name: metrics
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: docker-metrics
+volumes:
+  metrics-prometheus-data:
+    name: metrics-prometheus-data
+  metrics-grafana-data:
+    name: metrics-grafana-data

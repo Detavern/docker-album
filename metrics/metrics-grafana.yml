@@ -1,0 +1,33 @@
+name: metrics-grafana
+services:
+  metrics-grafana:
+    image: grafana/grafana:latest
+    hostname: grafana
+    container_name: metrics-grafana
+    restart: unless-stopped
+    networks:
+      metrics: null
+    ports:
+      - 3000:3000
+    volumes:
+      - metrics-grafana-data:/var/lib/grafana
+      - /etc/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - /etc/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      # - /etc/grafana:${GRAFANA_CONFIG_DIR:-/etc/grafana}
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_AUTH_BASIC_ENABLED: "false"
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_USERS_DEFAULT_THEME: "light"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: >-
+        ${GRAFANA_CONFIG_DIR:-/etc/grafana}/provisioning/dashboards/mikrotik/mikrotik_mktxp_exporter.json
+
+networks:
+  metrics:
+    name: metrics
+    external: true
+volumes:
+  metrics-grafana-data:
+    name: metrics-grafana-data
+    external: true

@@ -1,0 +1,42 @@
+name: metrics-prometheus
+services:
+  metrics-mktxp-exporter:
+    image: ghcr.io/akpw/mktxp:latest
+    hostname: mktxp
+    container_name: metrics-mktxp-exporter
+    restart: unless-stopped
+    user: root
+    networks:
+      metrics: null
+    ports:
+      - 49090:49090
+    volumes:
+      - /etc/mktxp:${MKTXP_CONFIG_DIR:-/root/mktxp}
+
+  metrics-prometheus:
+    image: prom/prometheus:latest
+    hostname: prometheus
+    container_name: metrics-prometheus
+    restart: unless-stopped
+    networks:
+      metrics: null
+    ports:
+      - 9090:9090
+    volumes:
+      - /etc/prometheus:${PROMETHEUS_CONFIG_DIR:-/etc/prometheus}
+      - metrics-prometheus-data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=1y
+      - --web.enable-admin-api
+      - --web.enable-lifecycle
+
+networks:
+  metrics:
+    name: metrics
+    external: true
+volumes:
+  metrics-prometheus-data:
+    name: metrics-prometheus-data
+    external: true
