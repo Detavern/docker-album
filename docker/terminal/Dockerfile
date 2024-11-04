@@ -2,7 +2,7 @@ FROM debian:bookworm
 
 # apt
 RUN apt-get update && \
-    apt-get install -y grep locales iproute2 iputils-ping openssh-server python3 pwgen && \
+    apt-get install -y grep locales iproute2 iputils-ping openssh-server vim python3 pwgen && \
     apt-get clean
 
 # sshd
