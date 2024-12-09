@@ -47,9 +47,11 @@ if [ ! -f "${FIRST_RUN}" ]; then
         echo "${COUNT} key(s) found"
         echo "${KEYS}" > "${AUTH_FILE}"
         sed -i 's/^#\?\(PermitRootLogin\) .*/\1 prohibit-password/' /etc/ssh/sshd_config
+        sed -i 's/^#\?\(PasswordAuthentication\) .*/\1 no/' /etc/ssh/sshd_config
     elif [ -n "${ROOT_PUBKEY}" ]; then
         echo "${ROOT_PUBKEY}" > "${AUTH_FILE}"
         sed -i 's/^#\?\(PermitRootLogin\) .*/\1 prohibit-password/' /etc/ssh/sshd_config
+        sed -i 's/^#\?\(PasswordAuthentication\) .*/\1 no/' /etc/ssh/sshd_config
     else
         echo "public key not found, enable password authentication"
         sed -i 's/^#\?\(PermitRootLogin\) .*/\1 yes/' /etc/ssh/sshd_config
