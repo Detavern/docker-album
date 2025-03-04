@@ -4,7 +4,7 @@
 }
 
 # site
-:443 {
+headscale.admin.local {
 	tls internal
-	reverse_proxy headscale-admin
+	reverse_proxy headscale-admin:80
 }
