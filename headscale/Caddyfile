@@ -1,0 +1,10 @@
+# Global options
+{
+	local_certs
+}
+
+# site
+:8088 {
+	tls internal
+	reverse_proxy headscale-admin
+}
