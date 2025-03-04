@@ -4,7 +4,7 @@
 }
 
 # site
-:8088 {
+:443 {
 	tls internal
 	reverse_proxy headscale-admin
 }
