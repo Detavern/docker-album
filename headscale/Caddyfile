@@ -4,7 +4,9 @@
 }
 
 # site
-headscale.admin.local {
-	tls internal
+:443 {
+	tls internal {
+		on_demand
+	}
 	reverse_proxy headscale-admin:80
 }
