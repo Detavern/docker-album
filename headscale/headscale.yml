@@ -17,3 +17,5 @@ services:
     hostname: headscale-admin
     container_name: headscale-admin
     restart: unless-stopped
+    ports:
+      - 8088:80
