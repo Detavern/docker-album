@@ -6,9 +6,6 @@ services:
     container_name: headscale
     restart: unless-stopped
     network_mode: host
-    ports:
-      - 8080:8080
-      - 9090:9090
     volumes:
       - ${HEADSCALE_CONFIG_DIR:-/etc/headscale}:/etc/headscale
       - ${HEADSCALE_DATA_DIR:-/var/lib/headscale}:/var/lib/headscale
