@@ -8,13 +8,10 @@ services:
     network_mode: host
     volumes:
       - ${DERPER_CERTS_DIR:-./certs}:/app/certs
-    command:
-      - -hostname "${DERPER_HOSTNAME}"
-      - -certmode manual
-      - -certdir /app/certs
-      # http/https listen address
-      - -a :443
-      # disable stun
-      - -stun false
-      # disable http
-      - -http-port -1
+    command: >-
+      -hostname "${DERPER_HOSTNAME}"
+      -certmode manual
+      -certdir /app/certs
+      -a :443
+      -stun false
+      -http-port -1
