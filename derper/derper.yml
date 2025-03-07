@@ -12,6 +12,6 @@ services:
       -hostname "${DERPER_HOSTNAME}"
       -certmode manual
       -certdir /app/certs
-      -a :443
-      -stun=false
+      -a :${DERPER_DERP_PORT:-443}
+      -stun=${DERPER_STUN_FLAG:-false}
       -http-port -1
