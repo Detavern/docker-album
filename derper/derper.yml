@@ -12,6 +12,9 @@ services:
       - -hostname "${DERPER_HOSTNAME}"
       - -certmode manual
       - -certdir /app/certs
+      # http/https listen address
       - -a :443
-      - -stun-port 3478
+      # disable stun
+      - -stun false
+      # disable http
       - -http-port -1
