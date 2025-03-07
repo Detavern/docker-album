@@ -13,5 +13,5 @@ services:
       -certmode manual
       -certdir /app/certs
       -a :443
-      -stun false
+      -stun=false
       -http-port -1
