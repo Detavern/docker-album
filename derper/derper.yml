@@ -1,0 +1,17 @@
+name: derper
+services:
+  derper:
+    image: 1itt1eb0y/derper:latest
+    hostname: derper
+    container_name: derper
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ${DERPER_CERTS_DIR:-./certs}:/app/certs
+    command:
+      - -hostname "${DERPER_HOSTNAME}"
+      - -certmode manual
+      - -certdir /app/certs
+      - -a :443
+      - -stun-port 3478
+      - -http-port -1
