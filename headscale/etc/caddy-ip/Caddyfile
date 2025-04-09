@@ -9,5 +9,5 @@
 		on_demand
 	}
 	reverse_proxy /admin/* headscale-admin:80
-	reverse_proxy 172.17.1.1:80
+	reverse_proxy headscale:80
 }
