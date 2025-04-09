@@ -6,10 +6,10 @@ services:
     container_name: caddy
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
       # HTTP/3
-      - "443:443/udp"
+      - 443:443/udp
     environment:
       # cloudflare dns api token
       CADDY_CF_API_TOKEN: ${CADDY_CF_API_TOKEN:?}
