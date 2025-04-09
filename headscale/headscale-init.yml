@@ -5,7 +5,7 @@ services:
     image: tianon/true
     networks:
       headscale:
-        ipv4_address: 172.17.100.254
+        ipv4_address: 172.18.10.254
     volumes:
       - headscale-data:/mnt/headscale-data
 
@@ -14,14 +14,14 @@ networks:
     name: headscale
     driver: bridge
     driver_opts:
-      com.docker.network.bridge.name: docker-headscale
+      com.docker.network.bridge.name: docker-hdscale
       com.docker.network.bridge.enable_icc: "true"
       com.docker.network.bridge.enable_ip_masquerade: "true"
-      com.docker.network.bridge.host_binding_ipv4: 172.17.100.1
+      com.docker.network.bridge.host_binding_ipv4: 172.18.10.1
       com.docker.network.driver.mtu: "1500"
     ipam:
       config:
-        - subnet: 172.17.100.0/24
+        - subnet: 172.18.10.0/24
 
 volumes:
   headscale-data:
