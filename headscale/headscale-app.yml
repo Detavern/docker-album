@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     networks:
       headscale:
-        ipv4_address: 172.18.10.2
+        ipv4_address: 172.17.100.2
     volumes:
       - ${HEADSCALE_CONFIG_DIR:-/etc/headscale}:/etc/headscale
       - headscale-data:/var/lib/headscale
@@ -20,7 +20,7 @@ services:
     restart: unless-stopped
     networks:
       headscale:
-        ipv4_address: 172.18.10.3
+        ipv4_address: 172.17.100.3
     depends_on:
       - headscale
 

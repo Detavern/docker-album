@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     networks:
       headscale:
-        ipv4_address: 172.18.10.5
+        ipv4_address: 172.17.100.5
     volumes:
       - ${HEADSCALE_CADDY_CONFIG_FILE:-/etc/headscale/caddy/Caddyfile}:/etc/caddy/Caddyfile
       - headscale-caddy-data:/data
