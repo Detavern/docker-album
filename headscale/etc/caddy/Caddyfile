@@ -11,6 +11,11 @@ headscale.example.com {
 		ca https://acme.zerossl.com/v2/DV90
 		dns cloudflare {env.HEADSCALE_CADDY_CF_API_TOKEN}
 	}
+
+	# redirect root path to admin page
+	@rootPath path /
+	redir @rootPath /admin/
+
 	reverse_proxy /admin/* headscale-admin:80
-	reverse_proxy headscale:80
+	reverse_proxy headscale:8080
 }
