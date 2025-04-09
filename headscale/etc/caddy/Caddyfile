@@ -1,0 +1,16 @@
+# Global options
+{
+	email cherry.hypernet@gmail.com
+	acme_dns cloudflare {env.HEADSCALE_CADDY_CF_API_TOKEN}
+	acme_ca https://acme.zerossl.com/v2/DV90
+}
+
+# site
+headscale.example.com {
+	tls cherry.hypernet@gmail.com {
+		ca https://acme.zerossl.com/v2/DV90
+		dns cloudflare {env.HEADSCALE_CADDY_CF_API_TOKEN}
+	}
+	reverse_proxy /admin/* headscale-admin:80
+	reverse_proxy headscale:80
+}

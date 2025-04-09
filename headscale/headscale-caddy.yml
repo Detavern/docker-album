@@ -1,0 +1,27 @@
+name: headscale-caddy
+services:
+  headscale-caddy:
+    image: caddy:2.8
+    hostname: headscale-caddy
+    container_name: headscale-caddy
+    restart: unless-stopped
+    networks:
+      headscale:
+        ipv4_address: 172.18.10.5
+    volumes:
+      - ${HEADSCALE_CADDY_CONFIG_FILE:-/etc/headscale/caddy/Caddyfile}:/etc/caddy/Caddyfile
+      - headscale-caddy-data:/data
+      - headscale-caddy-config:/config
+    environment:
+      HEADSCALE_CADDY_CF_API_TOKEN: ${HEADSCALE_CADDY_CF_API_TOKEN:?}
+
+networks:
+  headscale:
+    name: headscale
+    external: true
+
+volumes:
+  headscale-caddy-data:
+    name: headscale-caddy-data
+  headscale-caddy-config:
+    name: headscale-caddy-config
