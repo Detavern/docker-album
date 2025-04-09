@@ -1,7 +1,7 @@
 name: caddy
 services:
   caddy:
-    image: caddy:2.8
+    image: caddy:2.9
     hostname: caddy
     container_name: caddy
     restart: unless-stopped

@@ -1,7 +1,7 @@
 name: headscale-caddy
 services:
   headscale-caddy:
-    image: caddy:2.8
+    image: iarekylew00t/caddy-cloudflare:2.9
     hostname: headscale-caddy
     container_name: headscale-caddy
     restart: unless-stopped
