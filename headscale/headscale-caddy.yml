@@ -9,9 +9,9 @@ services:
       headscale:
         ipv4_address: 172.18.10.5
     ports:
-      - 80:80
-      - 443:443
-      - 443:443/udp
+      - 0.0.0.0:80:80
+      - 0.0.0.0:443:443
+      - 0.0.0.0:443:443/udp
     volumes:
       - ${HEADSCALE_CADDY_CONFIG_FILE:-/etc/headscale/caddy/Caddyfile}:/etc/caddy/Caddyfile
       - headscale-caddy-data:/data
