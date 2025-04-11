@@ -13,5 +13,7 @@ services:
       -certmode manual
       -certdir /app/certs
       -a :${DERPER_DERP_PORT:-443}
-      -stun=${DERPER_STUN_FLAG:-false}
+      -stun=${DERPER_STUN_FLAG:-true}
+      -stun-port ${DERPER_STUN_PORT:-3478}
       -http-port -1
+      --verify-clients
