@@ -8,11 +8,12 @@ services:
     networks:
       easytier:
         ipv4_address: 172.18.11.3
+    ports:
+      - 0.0.0.0:22020:22020
     volumes:
       - easytier-web-data:/data
     entrypoint: tini -- easytier-web
-    command: >-
-      -d /data/et.db
+    command: -d /data/et.db --console-log-level warn
 
 networks:
   easytier:
