@@ -1,0 +1,31 @@
+name: easytier-caddy
+services:
+  easytier-caddy:
+    image: iarekylew00t/caddy-cloudflare:2.9
+    hostname: easytier-caddy
+    container_name: easytier-caddy
+    restart: unless-stopped
+    networks:
+      easytier:
+        ipv4_address: 172.18.11.5
+    ports:
+      - 0.0.0.0:80:80
+      - 0.0.0.0:443:443
+      - 0.0.0.0:443:443/udp
+    environment:
+      EASYTIER_CADDY_CF_API_TOKEN: ${EASYTIER_CADDY_CF_API_TOKEN:?}
+    volumes:
+      - ${EASYTIER_CADDY_CONFIG_FILE:-/etc/easytier/caddy/Caddyfile}:/etc/caddy/Caddyfile
+      - easytier-caddy-data:/data
+      - easytier-caddy-config:/config
+
+networks:
+  easytier:
+    name: easytier
+    external: true
+
+volumes:
+  easytier-caddy-data:
+    name: easytier-caddy-data
+  easytier-caddy-config:
+    name: easytier-caddy-config

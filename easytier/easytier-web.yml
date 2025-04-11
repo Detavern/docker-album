@@ -1,0 +1,24 @@
+name: easytier-web
+services:
+  easytier-web:
+    image: easytier/easytier:latest
+    hostname: easytier-web
+    container_name: easytier-web
+    restart: unless-stopped
+    networks:
+      easytier:
+        ipv4_address: 172.18.11.3
+    volumes:
+      - easytier-web-data:/data
+    entrypoint: tini -- easytier-web
+    command: >-
+      -d /data/et.db
+
+networks:
+  easytier:
+    name: easytier
+    external: true
+
+volumes:
+  easytier-web-data:
+    name: easytier-web-data
