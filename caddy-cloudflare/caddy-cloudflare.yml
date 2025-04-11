@@ -10,6 +10,7 @@ services:
       CADDY_CF_API_TOKEN: ${CADDY_CF_API_TOKEN:?}
     volumes:
       - ${CADDY_CONFIG_FILE:-/etc/caddy/Caddyfile}:/etc/caddy/Caddyfile
+      - ${CADDY_SRV_DIR:-/data/caddy/srv}:/srv
       - caddy-cloudflare-data:/data
       - caddy-cloudflare-config:/config
 
