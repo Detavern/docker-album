@@ -9,15 +9,13 @@ services:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     network_mode: host
-    # privileged: true
     cap_add:
       - NET_ADMIN
       - NET_RAW
+    environment:
+      - TZ=Asia/Shanghai
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
       - ${EASYTIER_CONFIG_DIR:-/etc/easytier}:/etc/easytier
-    environment:
-      - TZ=Asia/Shanghai
-    command: >-
-      -c /etc/easytier/config.toml
+    command: -c /etc/easytier/config.toml
