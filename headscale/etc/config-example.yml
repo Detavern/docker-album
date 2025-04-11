@@ -96,7 +96,7 @@ derp:
     ipv4: 1.2.3.4
     ipv6: 2001:db8::1
 
-  # List of externally available DERP maps encoded in JSON
+  # CHANGEME: List of externally available DERP maps encoded in JSON
   # NOTE: https://controlplane.tailscale.com/derpmap/default
   urls: []
 
