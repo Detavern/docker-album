@@ -11,10 +11,9 @@ services:
       # HTTP/3
       - 443:443/udp
     environment:
-      # cloudflare dns api token
       CADDY_CF_API_TOKEN: ${CADDY_CF_API_TOKEN:?}
     volumes:
-      - /etc/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ${CADDY_CONFIG_FILE:-/etc/caddy/Caddyfile}:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
 

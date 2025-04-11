@@ -1,0 +1,20 @@
+name: caddy-cloudflare
+services:
+  caddy-cloudflare:
+    image: iarekylew00t/caddy-cloudflare:2.9
+    hostname: caddy-cloudflare
+    container_name: caddy-cloudflare
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      CADDY_CF_API_TOKEN: ${CADDY_CF_API_TOKEN:?}
+    volumes:
+      - ${CADDY_CONFIG_FILE:-/etc/caddy/Caddyfile}:/etc/caddy/Caddyfile
+      - caddy-cloudflare-data:/data
+      - caddy-cloudflare-config:/config
+
+volumes:
+  caddy-cloudflare-data:
+    name: caddy-cloudflare-data
+  caddy-cloudflare-config:
+    name: caddy-cloudflare-config
