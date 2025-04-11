@@ -1,5 +1,6 @@
 # If you plan to somehow use headscale,
 # please deploy your own DERP infra: https://tailscale.com/kb/1118/custom-derp-servers/
+# NOTE: currently does not support insecure for test
 
 regions:
   900:
