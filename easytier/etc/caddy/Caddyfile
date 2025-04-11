@@ -1,0 +1,18 @@
+# Global options
+{
+	email cherry.hypernet@gmail.com
+	acme_dns cloudflare {env.EASYTIER_CADDY_CF_API_TOKEN}
+	acme_ca https://acme.zerossl.com/v2/DV90
+}
+
+# site
+
+## easytier
+easytier.example.com {
+	tls cherry.hypernet@gmail.com {
+		ca https://acme.zerossl.com/v2/DV90
+		dns cloudflare {env.EASYTIER_CADDY_CF_API_TOKEN}
+	}
+
+	reverse_proxy easytier-web:11211
+}
