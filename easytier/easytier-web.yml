@@ -9,7 +9,7 @@ services:
       easytier:
         ipv4_address: 172.18.11.3
     ports:
-      - 0.0.0.0:22020:22020
+      - 0.0.0.0:22020:22020/udp
     volumes:
       - easytier-web-data:/data
     entrypoint: tini -- easytier-web
