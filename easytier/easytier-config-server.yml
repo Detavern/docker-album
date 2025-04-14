@@ -15,5 +15,6 @@ services:
       - TZ=Asia/Shanghai
     devices:
       - /dev/net/tun:/dev/net/tun
+    volumes:
       - /etc/machine-id:/etc/machine-id:ro
     command: -w ${EASYTIER_CONFIG_SERVER:-udp://config-server.easytier.cn:22020/admin}
