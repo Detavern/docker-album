@@ -1,7 +1,6 @@
 name: easytier
 services:
   easytier:
-    # 国内可以使用 m.daocloud.io/docker.io/easytier/easytier:latest
     image: easytier/easytier:latest
     hostname: ${EASYTIER_HOSTNAME:-easytier}
     container_name: easytier
@@ -16,4 +15,5 @@ services:
       - TZ=Asia/Shanghai
     devices:
       - /dev/net/tun:/dev/net/tun
+      - /etc/machine-id:/etc/machine-id:ro
     command: -w ${EASYTIER_CONFIG_SERVER:-udp://config-server.easytier.cn:22020/admin}
