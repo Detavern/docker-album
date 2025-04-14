@@ -1,0 +1,12 @@
+name: watchtower
+services:
+  watchtower:
+    image: containrrr/watchtower:latest
+    hostname: watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    environment:
+      - TZ=UTC
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --schedule "0 0 20 * * 0" --cleanup --label-enable
