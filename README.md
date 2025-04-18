@@ -1,6 +1,6 @@
 # DOCKER ALBUM
 
-Some useful docker-compose collections.
+Some useful docker compose collections
 
 ## HOW TO USE
 
