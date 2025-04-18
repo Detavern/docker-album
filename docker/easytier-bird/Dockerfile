@@ -3,7 +3,7 @@ FROM easytier/easytier:latest AS dumper
 FROM alpine:latest
 
 RUN apk upgrade --no-cache && \
-    apk add --no-cache bash tzdata iproute2 ca-certificates curl bird supervisor jq && \
+    apk add --no-cache bash tzdata ca-certificates curl iproute2 iperf3 bird supervisor jq && \
     mkdir -p /etc/bird
 
 COPY --from=dumper /usr/local/bin/* /usr/local/bin
