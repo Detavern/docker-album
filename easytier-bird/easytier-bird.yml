@@ -18,11 +18,13 @@ services:
       - TZ=Asia/Shanghai
       - EASYTIER_CONFIG_SERVER=${EASYTIER_CONFIG_SERVER:?}
       - BIRD_ROUTER_ID=${BIRD_ROUTER_ID:?}
+      - BIRD_STATIC_IPV6_ENABLED=0
+      - BIRD_OSPF_V3_ENABLED=0
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
-      - /etc/bird/ospf:/etc/bird/ospf
+      - /etc/bird:/etc/bird
 
 networks:
   easytier:
