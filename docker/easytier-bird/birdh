@@ -1,0 +1,138 @@
+#!/bin/bash
+set -euo pipefail
+
+# Configuration defaults
+CONFIG_FILE="/etc/bird/birdh.json"
+TARGET_DIR="/etc/bird/static4"
+
+usage() {
+    cat <<EOF
+Usage:
+  $0 [GLOBAL_OPTIONS] <COMMAND> [COMMAND_OPTIONS] [ARGUMENTS]
+
+Global Options:
+  -c FILE    Use alternate config file (default: /etc/bird/birdh.json)
+
+Commands:
+  current    Display current configuration
+  load       Load and apply all routes from config file
+  add        Add new route configuration
+
+Add Command Options:
+  -6         Create IPv6 routes (default: IPv4)
+  -p PROXY   Use proxy server for this download (format: http://proxy:port)
+
+Add Command Arguments:
+  NAME       Unique identifier for this route
+  IFACE      Network interface to use as gateway
+  URL        Source URL containing route entries (one per line)
+EOF
+    exit 1
+}
+
+# Initialize config file if missing
+ensure_config_exists() {
+    if [ ! -f "$CONFIG_FILE" ]; then
+        mkdir -p "$(dirname "$CONFIG_FILE")"
+        echo '{ "remotes": [] }' > "$CONFIG_FILE"
+    fi
+}
+
+# Generate BIRD config from downloaded routes
+update_remote_route() {
+    local name="$1" iface="$2" url="$3" ipv6="${4:-false}" proxy="${5:-}"
+    local tmp_file=$(mktemp)
+    local target_dir="/etc/bird/static$([ "$ipv6" = "true" ] && echo "6" || echo "4")"
+    local target_file="${target_dir}/${iface}_${name}.conf"
+
+    mkdir -p "$target_dir"
+    local download_url="${proxy:+${proxy%/}/}$url"
+
+    # Download and process route file
+    if ! wget -O "$tmp_file" "$download_url"; then
+        echo "Error: Failed to download $download_url" >&2
+        rm -f "$tmp_file"
+        return 1
+    fi
+
+    # Convert to BIRD config format
+	echo "Generating bird static routes at ${target_file} ..."
+    > "$target_file"
+    while IFS= read -r line; do
+        [[ -z "$line" || "$line" == \#* ]] && continue
+        echo "route $line via \"$iface\";" >> "$target_file"
+    done < "$tmp_file"
+
+    rm -f "$tmp_file"
+}
+
+# Load and apply all routes from config
+load_config_file() {
+    jq -c '.remotes[]' "$1" | while read -r remote; do
+        update_remote_route \
+            "$(jq -r '.name' <<< "$remote")" \
+            "$(jq -r '.interface' <<< "$remote")" \
+            "$(jq -r '.url' <<< "$remote")" \
+            "$(jq -r '.ipv6 // false' <<< "$remote")"
+    done
+	echo "Static file updated, reloading bird ..."
+    birdc configure
+}
+
+# Add new route to config
+add_remote() {
+    local name="$1" iface="$2" url="$3" ipv6="${4:-false}" proxy="${5:-}"
+    local tmp_json=$(mktemp)
+
+    # Update existing or add new entry
+    if jq -e --arg name "$name" '.remotes[] | select(.name == $name)' "$CONFIG_FILE"; then
+        jq --arg name "$name" --arg intf "$iface" --arg url "$url" --argjson ipv6 "$ipv6" \
+           '(.remotes[] | select(.name == $name)) |= {name: $name, interface: $intf, url: $url, ipv6: $ipv6}' \
+           "$CONFIG_FILE" > "$tmp_json"
+    else
+        jq --arg name "$name" --arg intf "$iface" --arg url "$url" --argjson ipv6 "$ipv6" \
+           '.remotes += [{name: $name, interface: $intf, url: $url, ipv6: $ipv6}]' \
+           "$CONFIG_FILE" > "$tmp_json"
+    fi
+
+    mv "$tmp_json" "$CONFIG_FILE"
+    update_remote_route "$name" "$iface" "$url" "$ipv6" "$proxy"
+}
+
+# --- Main program ---
+while getopts "c:" opt; do
+    case "$opt" in
+        c) CONFIG_FILE="$OPTARG" ;;
+        *) usage ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+ensure_config_exists
+
+case "${1:-}" in
+    current)
+        jq . "$CONFIG_FILE"
+        ;;
+    load)
+        load_config_file "$CONFIG_FILE"
+        ;;
+    add)
+        shift
+        USE_IPV6=false
+        PROXY=""
+        while getopts "6p:" opt; do
+            case "$opt" in
+                6) USE_IPV6=true ;;
+                p) PROXY="$OPTARG" ;;
+                *) usage ;;
+            esac
+        done
+        shift $((OPTIND - 1))
+        [ $# -eq 3 ] || usage
+        add_remote "$1" "$2" "$3" "$USE_IPV6" "$PROXY"
+        ;;
+    *)
+        usage
+        ;;
+esac
