@@ -51,9 +51,9 @@ if [ ! -f "${FIRST_RUN}" ]; then
 
     # prepare static directory
     BIRD_CONF_STATIC4_DIR="${BIRD_CONF_DIR}/static4"
-    mkdir -p ${BIRD_CONF_STATIC_DIR}
+    mkdir -p ${BIRD_CONF_STATIC4_DIR}
     BIRD_CONF_STATIC6_DIR="${BIRD_CONF_DIR}/static6"
-    mkdir -p ${BIRD_CONF_STATIC_DIR}
+    mkdir -p ${BIRD_CONF_STATIC6_DIR}
 
     # add cron
     echo -e "0\t17\t*\t*\t*\tbirdh load" >> /etc/crontabs/root
