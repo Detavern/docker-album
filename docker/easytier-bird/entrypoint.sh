@@ -8,10 +8,16 @@ BIRD_CONF_DIR="/etc/bird"
 BIRD_CONF_FILE="${BIRD_CONF_DIR}/bird.conf"
 
 comment_block_after_header() {
-  local header="$1"
-  local file="$2"
+    local header="$1"
+    local file="$2"
+    local temp_file=$(mktemp)
 
-  sed -i "/^$header/{:a; n; /^$/b; s/^/## /; ba}" "$file"
+    awk -v header="$header" '
+        $0 ~ "^"header {print; in_block=1; next}
+        in_block && /^$/ {in_block=0}
+        in_block && !/^# / {sub(/^/, "# ")}
+        {print}
+    ' "$file" > "$temp_file" && mv "$temp_file" "$file"
 }
 
 if [ ! -f "${FIRST_RUN}" ]; then

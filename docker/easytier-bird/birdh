@@ -7,25 +7,26 @@ TARGET_DIR="/etc/bird/static4"
 
 usage() {
     cat <<EOF
+BIRD Helper
+
 Usage:
-  $0 [GLOBAL_OPTIONS] <COMMAND> [COMMAND_OPTIONS] [ARGUMENTS]
+  $0 [GLOBAL_OPTIONS] COMMAND [COMMAND_OPTIONS] [ARGUMENTS]
 
 Global Options:
-  -c FILE    Use alternate config file (default: /etc/bird/birdh.json)
+  -c FILE    Specify alternate config file (default: /etc/bird/birdh.json)
 
-Commands:
+Available Commands:
   current    Display current configuration
   load       Load and apply all routes from config file
   add        Add new route configuration
+  delete     Remove a route configuration
 
 Add Command Options:
-  -6         Create IPv6 routes (default: IPv4)
-  -p PROXY   Use proxy server for this download (format: http://proxy:port)
+  -6         Configure IPv6 routes (default: IPv4)
+  -p PROXY   Use HTTP proxy for this operation
 
-Add Command Arguments:
-  NAME       Unique identifier for this route
-  IFACE      Network interface to use as gateway
-  URL        Source URL containing route entries (one per line)
+Delete Command Arguments:
+  NAME       Name of the route configuration to remove
 EOF
     exit 1
 }
@@ -48,7 +49,6 @@ update_remote_route() {
     mkdir -p "$target_dir"
     local download_url="${proxy:+${proxy%/}/}$url"
 
-    # Download and process route file
     if ! wget -O "$tmp_file" "$download_url"; then
         echo "Error: Failed to download $download_url" >&2
         rm -f "$tmp_file"
@@ -75,7 +75,41 @@ load_config_file() {
             "$(jq -r '.url' <<< "$remote")" \
             "$(jq -r '.ipv6 // false' <<< "$remote")"
     done
+
 	echo "Static file updated, reloading bird ..."
+    birdc configure
+}
+
+# Delete route config and files
+delete_remote() {
+    local name="$1"
+    local tmp_json=$(mktemp)
+    
+    # Find and remember the route details before deletion
+    local route_info=$(jq --arg name "$name" '.remotes[] | select(.name == $name)' "$CONFIG_FILE")
+    
+    if [ -z "$route_info" ]; then
+        echo "Error: Route '$name' not found" >&2
+        return 1
+    fi
+
+    # Remove from config
+    jq --arg name "$name" 'del(.remotes[] | select(.name == $name))' "$CONFIG_FILE" > "$tmp_json"
+    mv "$tmp_json" "$CONFIG_FILE"
+
+    # Delete route files (both IPv4 and IPv6)
+    local iface=$(jq -r '.interface' <<< "$route_info")
+    local ipv6=$(jq -r '.ipv6 // false' <<< "$route_info")
+    
+    # Remove IPv4 file
+    local ipv4_file="/etc/bird/static4/${iface}_${name}.conf"
+    [ -f "$ipv4_file" ] && rm -f "$ipv4_file"
+    
+    # Remove IPv6 file if it exists
+    local ipv6_file="/etc/bird/static6/${iface}_${name}.conf"
+    [ -f "$ipv6_file" ] && rm -f "$ipv6_file"
+
+	echo "Static file deleted, reloading bird ..."
     birdc configure
 }
 
@@ -97,6 +131,9 @@ add_remote() {
 
     mv "$tmp_json" "$CONFIG_FILE"
     update_remote_route "$name" "$iface" "$url" "$ipv6" "$proxy"
+
+	echo "Static file added, reloading bird ..."
+    birdc configure
 }
 
 # --- Main program ---
@@ -131,6 +168,11 @@ case "${1:-}" in
         shift $((OPTIND - 1))
         [ $# -eq 3 ] || usage
         add_remote "$1" "$2" "$3" "$USE_IPV6" "$PROXY"
+        ;;
+    delete)
+        shift
+        [ $# -eq 1 ] || usage
+        delete_remote "$1"
         ;;
     *)
         usage
