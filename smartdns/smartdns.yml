@@ -1,0 +1,10 @@
+name: smartdns
+services:
+  smartdns:
+    image: pymumu/smartdns:latest
+    hostname: smartdns
+    container_name: smartdns
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /etc/smartdns:/etc/smartdns
