@@ -35,12 +35,12 @@ if [ ! -f "${FIRST_RUN}" ]; then
         sed -i "s/^\(router id\) .*\?;/\1 ${BIRD_ROUTER_ID};/" ${BIRD_CONF_FILE}
 
         # static ipv4
-        if [ "${BIRD_STATIC_IPV6_ENABLED}" = "0" ]; then
+        if [ "${BIRD_STATIC_IPV4_ENABLED}" = "0" ]; then
             comment_block_after_header "### static ipv4" ${BIRD_CONF_FILE}
         fi
 
         # static ipv6
-        if [ "${BIRD_STATIC_IPV4_ENABLED}" = "0" ]; then
+        if [ "${BIRD_STATIC_IPV6_ENABLED}" = "0" ]; then
             comment_block_after_header "### static ipv6" ${BIRD_CONF_FILE}
         fi
 
