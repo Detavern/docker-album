@@ -24,6 +24,7 @@ Available Commands:
 Add Command Options:
   -6         Configure IPv6 routes (default: IPv4)
   -p PROXY   Use HTTP proxy for this operation
+  -g GATEWAY Specify gateway IP address (default: use interface)
 
 Add Command Arguments:
   NAME       Name of the route configuration
@@ -47,7 +48,7 @@ ensure_config_exists() {
 
 # Generate BIRD config from downloaded routes
 update_remote_route() {
-    local name="$1" iface="$2" url="$3" metric="$4" ipv6="${5:-false}" proxy="${6:-}" 
+    local name="$1" iface="$2" url="$3" metric="$4" ipv6="${5:-false}" proxy="${6:-}" gateway="${7:-}"
     local tmp_file=$(mktemp)
     local target_dir="/etc/bird/static$([ "$ipv6" = "true" ] && echo "6" || echo "4")"
     local target_file="${target_dir}/${iface}_${name}.conf"
@@ -66,7 +67,11 @@ update_remote_route() {
     > "$target_file"
     while IFS= read -r line; do
         [[ -z "$line" || "$line" == \#* ]] && continue
-        echo "route $line via \"$iface\" { krt_metric = ${metric}; };" >> "$target_file"
+        if [ -n "$gateway" ]; then
+            echo "route $line via $gateway { krt_metric = ${metric}; };" >> "$target_file"
+        else
+            echo "route $line via \"$iface\" { krt_metric = ${metric}; };" >> "$target_file"
+        fi
     done < "$tmp_file"
 
     rm -f "$tmp_file"
@@ -79,8 +84,9 @@ load_config_file() {
             "$(jq -r '.name' <<< "$remote")" \
             "$(jq -r '.interface' <<< "$remote")" \
             "$(jq -r '.url' <<< "$remote")" \
-            "$(jq -r '.metric' <<< "$remote")"
+            "$(jq -r '.metric' <<< "$remote")" \
             "$(jq -r '.ipv6 // false' <<< "$remote")" \
+            "$(jq -r '.gateway // empty' <<< "$remote")"
     done
 
     echo "Static file updated, reloading bird..."
@@ -122,7 +128,7 @@ delete_remote() {
 
 # Add new route to config
 add_remote() {
-    local name="$1" iface="$2" url="$3" metric="$4" ipv6="${5:-false}" proxy="${6:-}"
+    local name="$1" iface="$2" url="$3" metric="$4" ipv6="${5:-false}" proxy="${6:-}" gateway="${7:-}"
     local tmp_json=$(mktemp)
 
     # Validate metric is a number
@@ -133,17 +139,17 @@ add_remote() {
 
     # Update existing or add new entry
     if jq -e --arg name "$name" '.remotes[] | select(.name == $name)' "$CONFIG_FILE"; then
-        jq --arg name "$name" --arg intf "$iface" --arg url "$url" --argjson metric "$metric" --argjson ipv6 "$ipv6" \
-           '(.remotes[] | select(.name == $name)) |= {name: $name, interface: $intf, url: $url, metric: $metric, ipv6: $ipv6}' \
+        jq --arg name "$name" --arg intf "$iface" --arg url "$url" --argjson metric "$metric" --argjson ipv6 "$ipv6" --arg gateway "$gateway" \
+           '(.remotes[] | select(.name == $name)) |= {name: $name, interface: $intf, url: $url, metric: $metric, ipv6: $ipv6, gateway: $gateway}' \
            "$CONFIG_FILE" > "$tmp_json"
     else
-        jq --arg name "$name" --arg intf "$iface" --arg url "$url" --argjson metric "$metric" --argjson ipv6 "$ipv6" \
-           '.remotes += [{name: $name, interface: $intf, url: $url, metric: $metric, ipv6: $ipv6}]' \
+        jq --arg name "$name" --arg intf "$iface" --arg url "$url" --argjson metric "$metric" --argjson ipv6 "$ipv6" --arg gateway "$gateway" \
+           '.remotes += [{name: $name, interface: $intf, url: $url, metric: $metric, ipv6: $ipv6, gateway: $gateway}]' \
            "$CONFIG_FILE" > "$tmp_json"
     fi
 
     mv "$tmp_json" "$CONFIG_FILE"
-    update_remote_route "$name" "$iface" "$url" "$metric" "$ipv6" "$proxy"
+    update_remote_route "$name" "$iface" "$url" "$metric" "$ipv6" "$proxy" "$gateway"
 
     echo "Static file added, reloading bird..."
     birdc configure
@@ -171,16 +177,18 @@ case "${1:-}" in
         shift
         USE_IPV6=false
         PROXY=""
-        while getopts "6p:" opt; do
+        GATEWAY=""
+        while getopts "6p:g:" opt; do
             case "$opt" in
                 6) USE_IPV6=true ;;
                 p) PROXY="$OPTARG" ;;
+                g) GATEWAY="$OPTARG" ;;
                 *) usage ;;
             esac
         done
         shift $((OPTIND - 1))
         [ $# -eq 4 ] || { echo "Error: Requires NAME, INTERFACE, URL, and METRIC arguments" >&2; usage; }
-        add_remote "$1" "$2" "$3" "$4" "$USE_IPV6" "$PROXY"
+        add_remote "$1" "$2" "$3" "$4" "$USE_IPV6" "$PROXY" "$GATEWAY"
         ;;
     delete)
         shift
