@@ -1,7 +1,7 @@
 name: easytier
 services:
   easytier:
-    image: easytier/easytier:latest
+    image: ${EASYTIER_IMAGE:-easytier/easytier:latest}
     hostname: ${EASYTIER_HOSTNAME:-easytier}
     container_name: easytier
     labels:

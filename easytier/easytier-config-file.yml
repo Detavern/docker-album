@@ -1,8 +1,7 @@
 name: easytier
 services:
   easytier:
-    # 国内可以使用 m.daocloud.io/docker.io/easytier/easytier:latest
-    image: easytier/easytier:latest
+    image: ${EASYTIER_IMAGE:-easytier/easytier:latest}
     hostname: ${EASYTIER_HOSTNAME:-easytier}
     container_name: easytier
     labels:

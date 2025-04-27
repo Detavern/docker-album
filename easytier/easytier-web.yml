@@ -1,7 +1,7 @@
 name: easytier-web
 services:
   easytier-web:
-    image: easytier/easytier:latest
+    image: ${EASYTIER_IMAGE:-easytier/easytier:latest}
     hostname: easytier-web
     container_name: easytier-web
     restart: unless-stopped
