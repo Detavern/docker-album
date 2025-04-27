@@ -4,6 +4,8 @@ services:
     image: ${SMARTDNS_IMAGE:-pymumu/smartdns:latest}
     hostname: smartdns
     container_name: smartdns
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     network_mode: host
     volumes:
