@@ -7,10 +7,7 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
-    networks:
-      easytier:
-        ipv4_address: 172.18.11.11
-        ipv6_address: fd00:172:18:11::11/64
+    network_mode: host
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -19,25 +16,10 @@ services:
       - EASYTIER_CONFIG_SERVER=${EASYTIER_CONFIG_SERVER:?}
       - BIRD_ROUTER_ID=${BIRD_ROUTER_ID:?}
       - BIRD_STATIC_IPV6_ENABLED=0
+      - BIRD_OSPF_V2_ENABLED=0
       - BIRD_OSPF_V3_ENABLED=0
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
       - /etc/bird:/etc/bird
-
-networks:
-  easytier:
-    name: easytier
-    driver: bridge
-    enable_ipv6: true
-    driver_opts:
-      com.docker.network.bridge.name: docker-et
-      com.docker.network.bridge.enable_icc: "true"
-      com.docker.network.bridge.enable_ip_masquerade: "true"
-      com.docker.network.bridge.host_binding_ipv4: 172.18.11.1
-      com.docker.network.driver.mtu: "1380"
-    ipam:
-      config:
-        - subnet: 172.18.11.0/24
-        - subnet: fd00:172:18:11::/64
