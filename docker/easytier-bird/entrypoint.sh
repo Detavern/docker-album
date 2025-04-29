@@ -4,6 +4,7 @@ set -euo pipefail
 
 # first run
 FIRST_RUN="/root/.firstrun"
+MACHINE_ID_FILE="/etc/machine-id"
 BIRD_CONF_DIR="/etc/bird"
 BIRD_CONF_FILE="${BIRD_CONF_DIR}/bird.conf"
 
@@ -25,6 +26,15 @@ if [ ! -f "${FIRST_RUN}" ]; then
     if [ -z "${EASYTIER_CONFIG_SERVER}" ]; then
         echo "EASYTIER_CONFIG_SERVER not set, check it manually" 2>&1
         exit 1
+    fi
+
+    # init machine-id
+    if [ ! -f "${MACHINE_ID_FILE}" ]; then
+        if [ -z "${MACHINE_ID}" ]; then
+            MACHINE_ID=$(dbus-uuidgen)
+            echo "MACHINE_ID not set, generated ${MACHINE_ID}"
+        fi
+        echo "${MACHINE_ID}" > ${MACHINE_ID_FILE}
     fi
 
     # init bird.conf
