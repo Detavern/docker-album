@@ -6,6 +6,7 @@ RUN apk upgrade --no-cache && \
     apk add --no-cache bash tzdata ca-certificates dbus \
     curl bind-tools iproute2 iperf3 iptables nftables \
     jq bird supervisor && \
+    rm -f /etc/machine-id && \
     mkdir -p /etc/bird
 
 COPY --from=dumper /usr/local/bin/* /usr/local/bin
