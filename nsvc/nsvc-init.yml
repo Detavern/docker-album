@@ -4,7 +4,6 @@ services:
     container_name: nsvc-init
     image: tianon/true
     networks:
-      easytier: null
       nsvc:
         ipv4_address: ${NET_ADDR_INIT_IPV4:-7.19.0.254}
 
