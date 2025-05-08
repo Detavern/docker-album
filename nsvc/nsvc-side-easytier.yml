@@ -8,7 +8,7 @@ services:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     networks:
-      nsvc-easytier: null
+      easytier: null
       nsvc: null
     ports:
       - 11001:11001
@@ -22,17 +22,9 @@ services:
     command: -w ${EASYTIER_CONFIG_SERVER:-udp://config-server.easytier.cn:22020/admin}
 
 networks:
-  nsvc-easytier:
-    name: nsvc-easytier
-    driver: bridge
-    driver_opts:
-      com.docker.network.bridge.name: docker-et
-      com.docker.network.bridge.enable_icc: "true"
-      com.docker.network.bridge.enable_ip_masquerade: "true"
-      com.docker.network.driver.mtu: "1380"
-    ipam:
-      config:
-        - subnet: 172.18.11.0/24
+  easytier:
+    name: easytier
+    external: true
   nsvc:
     name: nsvc
     external: true
