@@ -1,17 +1,12 @@
 name: nginx
 services:
   nginx:
-    image: nginx:latest
+    image: ${NGINX_IMAGE:-nginx:latest}
     hostname: nginx
     container_name: nginx
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
-    ports:
-      - 80:80
-      - 443:443
+    network_mode: host
     volumes:
       - ${NGINX_CONF_FILE:-/etc/nginx.conf}:/etc/nginx.conf
-    deploy:
-      resources:
-        limits:
-          cpus: "1.0"
-          memory: 512mb
