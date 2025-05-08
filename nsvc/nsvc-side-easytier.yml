@@ -3,7 +3,7 @@ services:
   nsvc-side-easytier:
     image: ${EASYTIER_IMAGE:-easytier/easytier:latest}
     hostname: ${EASYTIER_HOSTNAME:-easytier}
-    container_name: easytier
+    container_name: nsvc-side-easytier
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
@@ -11,8 +11,8 @@ services:
       easytier: null
       nsvc: null
     ports:
-      - 0.0.0.0:11010-11250:11010-11250
-      - 0.0.0.0:11010-11250:11010-11250/udp
+      - 11010-11250:11010-11250
+      - 11010-11250:11010-11250/udp
     cap_add:
       - NET_ADMIN
       - NET_RAW
