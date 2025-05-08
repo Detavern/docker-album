@@ -35,7 +35,6 @@ networks:
       com.docker.network.bridge.name: docker-et
       com.docker.network.bridge.enable_icc: "true"
       com.docker.network.bridge.enable_ip_masquerade: "true"
-      com.docker.network.bridge.host_binding_ipv4: 172.18.11.1
       com.docker.network.driver.mtu: "1380"
     ipam:
       config:

@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     networks:
       nsvc:
-        ipv4_address: ${NET_ADDR_NGINX_SNI_IPV4:-7.19.0.1}
+        ipv4_address: ${NET_ADDR_NGINX_SNI_IPV4:-7.19.0.51}
     volumes:
       - ${NGINX_SNI_CONF_FILE:-/etc/nsvc/sni/nginx.conf}:/etc/nginx.conf
 
