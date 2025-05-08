@@ -8,11 +8,10 @@ services:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     networks:
-      easytier: null
-      nsvc: null
+      - easytier: null
+      - nsvc: null
     ports:
-      - 11010-11250:11010-11250
-      - 11010-11250:11010-11250/udp
+      - 11001:11001
     cap_add:
       - NET_ADMIN
       - NET_RAW
