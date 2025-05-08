@@ -8,7 +8,8 @@ services:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     networks:
-      easytier: null
+      easytier:
+        priority: 90
       nsvc: null
     ports:
       - 11001:11001
