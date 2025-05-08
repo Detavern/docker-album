@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     networks:
       easytier:
-        priority: 90
+        gw_priority: 10
       nsvc: null
     ports:
       - 11001:11001
