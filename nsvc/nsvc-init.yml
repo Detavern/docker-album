@@ -1,0 +1,24 @@
+name: nsvc-init
+services:
+  init:
+    container_name: nsvc-init
+    image: tianon/true
+    networks:
+      nsvc:
+        ipv4_address: ${NET_ADDR_INIT_IPV4:-7.19.0.253}
+
+networks:
+  nsvc:
+    name: nsvc
+    driver: bridge
+    enable_ipv6: true
+    driver_opts:
+      com.docker.network.bridge.name: docker-nsvc
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.bridge.host_binding_ipv4: ${NET_ADDR_GATEWAY_IPV4:-7.19.0.254}
+      com.docker.network.driver.mtu: ${NET_MTU:-1500}
+    ipam:
+      config:
+        - subnet: ${NET_CIDR_IPV4:-7.19.0.0/24}
+        - subnet: ${NET_CIDR_IPV6:-fd00:7:19:0::/64}

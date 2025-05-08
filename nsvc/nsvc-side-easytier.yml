@@ -1,0 +1,40 @@
+name: nsvc-side-easytier
+services:
+  nsvc-side-easytier:
+    image: ${EASYTIER_IMAGE:-easytier/easytier:latest}
+    hostname: ${EASYTIER_HOSTNAME:-easytier}
+    container_name: easytier
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: unless-stopped
+    network:
+      easytier: null
+      nsvc: null
+    ports:
+      - 0.0.0.0:11010-11250:11010-11250
+      - 0.0.0.0:11010-11250:11010-11250/udp
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - /etc/machine-id:/etc/machine-id:ro
+    command: -w ${EASYTIER_CONFIG_SERVER:-udp://config-server.easytier.cn:22020/admin}
+
+networks:
+  easytier:
+    name: easytier
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: docker-et
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.bridge.host_binding_ipv4: 172.18.11.1
+      com.docker.network.driver.mtu: "1380"
+    ipam:
+      config:
+        - subnet: 172.18.11.0/24
+  nsvc:
+    name: nsvc
+    external: true
