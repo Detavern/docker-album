@@ -1,9 +1,9 @@
 name: nginx-sni-proxy
 services:
-  nginx:
+  nginx-sni-proxy:
     image: ${NGINX_IMAGE:-nginx:latest}
-    hostname: nginx
-    container_name: nginx
+    hostname: ${NGINX_HOSTNAME:-nginx-sni-proxy}
+    container_name: nginx-sni-proxy
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
