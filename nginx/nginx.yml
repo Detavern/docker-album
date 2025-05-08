@@ -2,7 +2,7 @@ name: nginx
 services:
   nginx:
     image: ${NGINX_IMAGE:-nginx:latest}
-    hostname: nginx
+    hostname: ${NGINX_HOSTNAME:-nginx}
     container_name: nginx
     labels:
       com.centurylinklabs.watchtower.enable: "true"
