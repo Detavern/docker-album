@@ -10,7 +10,7 @@ services:
     networks:
       sni-proxy: null
     volumes:
-      - ${NGINX_CONF_FILE:-/etc/nginx.conf}:/etc/nginx.conf
+      - ${NGINX_CONF_FILE:-/etc/sni/nginx.conf}:/etc/nginx.conf
 
 networks:
   sni-proxy:
