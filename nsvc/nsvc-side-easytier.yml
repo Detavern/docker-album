@@ -7,7 +7,7 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
-    network:
+    networks:
       easytier: null
       nsvc: null
     ports:
