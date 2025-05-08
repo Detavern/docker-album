@@ -23,7 +23,7 @@ services:
 
 networks:
   nsvc-easytier:
-    name: easytier
+    name: nsvc-easytier
     driver: bridge
     driver_opts:
       com.docker.network.bridge.name: docker-et
