@@ -9,10 +9,6 @@ services:
     restart: unless-stopped
     networks:
       sni-proxy: null
-    ports:
-      - 80:80
-      - 443:443
-      - 443:443/udp
     volumes:
       - ${NGINX_CONF_FILE:-/etc/sni/nginx.conf}:/etc/nginx.conf
 
