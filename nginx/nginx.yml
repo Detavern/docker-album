@@ -9,4 +9,4 @@ services:
     restart: unless-stopped
     network_mode: host
     volumes:
-      - ${NGINX_CONF_FILE:-/etc/nginx.conf}:/etc/nginx.conf
+      - ${NGINX_CONF_DIR:-/etc/nginx}:/etc/nginx

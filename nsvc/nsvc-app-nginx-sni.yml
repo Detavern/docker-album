@@ -11,7 +11,7 @@ services:
       nsvc:
         ipv4_address: ${NET_ADDR_NGINX_SNI_IPV4:-7.19.0.61}
     volumes:
-      - ${NGINX_SNI_CONF_FILE:-/etc/nsvc/sni/nginx.conf}:/etc/nginx.conf
+      - ${NGINX_SNI_CONF_DIR:-/etc/nsvc/sni/nginx}:/etc/nginx
 
 networks:
   nsvc:
