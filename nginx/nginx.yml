@@ -1,0 +1,12 @@
+name: nginx
+services:
+  nginx:
+    image: ${NGINX_IMAGE:-nginx:latest}
+    hostname: ${NGINX_HOSTNAME:-nginx}
+    container_name: nginx
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ${NGINX_CONF_DIR:-/etc/nginx}:/etc/nginx

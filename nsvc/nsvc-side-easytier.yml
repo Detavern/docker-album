@@ -1,30 +1,26 @@
-name: easytier-bird
+name: nsvc-side-easytier
 services:
-  easytier-bird:
-    image: ${EASYTIER_BIRD_IMAGE:-ghcr.io/detavern/easytier-bird:latest}
-    hostname: ${EASYTIER_HOSTNAME:-easytier-bird}
-    container_name: easytier-bird
+  nsvc-side-easytier:
+    image: ${EASYTIER_IMAGE:-easytier/easytier:latest}
+    hostname: ${EASYTIER_HOSTNAME:-easytier}
+    container_name: nsvc-side-easytier
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     networks:
       easytier:
-        ipv4_address: 172.18.11.11
-        ipv6_address: fd00:172:18:11::11/64
+        gw_priority: 10
+      nsvc: null
+    ports:
+      - 11001:11001
     cap_add:
       - NET_ADMIN
       - NET_RAW
-    environment:
-      - TZ=Asia/Shanghai
-      - EASYTIER_CONFIG_SERVER=${EASYTIER_CONFIG_SERVER:?}
-      - BIRD_ROUTER_ID=${BIRD_ROUTER_ID:?}
-      - BIRD_STATIC_IPV6_ENABLED=0
-      - BIRD_OSPF_V3_ENABLED=0
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
-      - /etc/bird:/etc/bird
+    command: -w ${EASYTIER_CONFIG_SERVER:-udp://config-server.easytier.cn:22020/admin}
 
 networks:
   easytier:
@@ -40,3 +36,6 @@ networks:
       config:
         - subnet: 172.18.11.0/24
         - subnet: fd00:172:18:11::/64
+  nsvc:
+    name: nsvc
+    external: true

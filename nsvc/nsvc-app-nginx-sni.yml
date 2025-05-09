@@ -1,0 +1,19 @@
+name: nsvc-app-nginx-sni
+services:
+  nsvc-app-nginx-sni:
+    image: nginx:latest
+    hostname: ${NGINX_SNI_HOSTNAME:-nsvc-app-nginx-sni}
+    container_name: nsvc-app-nginx-sni
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: unless-stopped
+    networks:
+      nsvc:
+        ipv4_address: ${NET_ADDR_NGINX_SNI_IPV4:-7.19.0.61}
+    volumes:
+      - ${NGINX_SNI_CONF_DIR:-/etc/nsvc/sni/nginx}:/etc/nginx
+
+networks:
+  nsvc:
+    name: nsvc
+    external: true
