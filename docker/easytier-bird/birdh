@@ -68,9 +68,9 @@ update_remote_route() {
     while IFS= read -r line; do
         [[ -z "$line" || "$line" == \#* ]] && continue
         if [ -n "$gateway" ]; then
-            echo "route $line via $gateway { krt_metric = ${metric}; };" >> "$target_file"
+            echo "route $line via $gateway { igp_metric = ${metric}; krt_metric = ${metric}; };" >> "$target_file"
         else
-            echo "route $line via \"$iface\" { krt_metric = ${metric}; };" >> "$target_file"
+            echo "route $line via \"$iface\" { igp_metric = ${metric}; krt_metric = ${metric}; };" >> "$target_file"
         fi
     done < "$tmp_file"
 
