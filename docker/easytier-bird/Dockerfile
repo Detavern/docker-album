@@ -4,8 +4,8 @@ FROM alpine:latest
 
 RUN apk upgrade --no-cache && \
     apk add --no-cache bash tzdata ca-certificates dbus \
-    curl bind-tools iproute2 iperf3 iptables nftables \
-    jq bird supervisor && \
+    curl bind-tools iproute2 iperf3 iptables-legacy iptables nftables \
+    vim jq bird supervisor py3-pip && \
     rm -f /etc/machine-id && \
     mkdir -p /etc/bird
 
