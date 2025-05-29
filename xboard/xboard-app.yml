@@ -30,6 +30,8 @@ services:
       - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
       - ${XBOARD_APP_DATA_PLUGINS:-/data/xboard/plugins}:/www/plugins
     command: php artisan octane:start --host=0.0.0.0 --port=7001
+    depends_on:
+      - xboard-app-init
   xboard-app-horizon:
     image: ghcr.io/cedar2025/xboard:new
     hostname: xboard-app-horizon
