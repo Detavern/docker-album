@@ -11,7 +11,7 @@ services:
       - ENABLE_REDIS=true
       - ADMIN_ACCOUNT=${XBOARD_ADMIN_ACCOUNT:-admin@example.com}
     volumes:
-      - xboard-redis-data:/data
+      - xboard-redis-data:/data/redis
       - xboard-sqlite-data:/www/.docker/.data
       - ${XBOARD_APP_ENV:-/data/xboard/env}:/www/.env
       - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
