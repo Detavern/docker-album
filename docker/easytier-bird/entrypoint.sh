@@ -5,8 +5,10 @@ set -euo pipefail
 # first run
 FIRST_RUN="/root/.firstrun"
 MACHINE_ID_FILE="/etc/machine-id"
+BIRD_TMPL_DIR="/root/templates"
 BIRD_CONF_DIR="/etc/bird"
 BIRD_CONF_FILE="${BIRD_CONF_DIR}/bird.conf"
+BIRD_TMPL_FILE="${BIRD_TMPL_DIR}/${BIRD_CONF_TMPL}.tmpl.conf"
 
 comment_block_after_header() {
     local header="$1"
@@ -39,7 +41,11 @@ if [ ! -f "${FIRST_RUN}" ]; then
 
     # init bird.conf
     if [ ! -f "${BIRD_CONF_FILE}" ]; then
-        cp /root/bird.tmpl.conf ${BIRD_CONF_FILE}
+        if [ ! -f "${BIRD_TMPL_FILE}" ]; then
+            echo "could not found bird configuration template ${BIRD_TMPL_FILE}, check it manually" 2>&1
+            exit 1
+        fi
+        cp ${BIRD_TMPL_FILE} ${BIRD_CONF_FILE}
 
         # router id
         sed -i "s/^\(router id\) .*\?;/\1 ${BIRD_ROUTER_ID};/" ${BIRD_CONF_FILE}
