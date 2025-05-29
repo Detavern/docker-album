@@ -14,8 +14,9 @@ services:
       - ${XBOARD_DATA_DIR:-/data/xboard/docker}/redis:/data
       - ${XBOARD_DATA_DIR:-/data/xboard/docker}:/www/.docker/.data
       - ${XBOARD_APP_ENV:-/data/xboard/env}:/www/.env
-      - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
       - ${XBOARD_APP_DATA_PLUGINS:-/data/xboard/plugins}:/www/plugins
+      - ${XBOARD_APP_STORAGE_LOGS:-/data/xboard/storage/logs}:/www/storage/logs
+      - ${XBOARD_APP_STORAGE_THEME:-/data/xboard/storage/theme}:/www/storage/theme
     command: php artisan octane:start --host=0.0.0.0 --port=7001
   xboard-app-horizon:
     image: ghcr.io/cedar2025/xboard:new
@@ -28,8 +29,8 @@ services:
       - ${XBOARD_DATA_DIR:-/data/xboard/docker}/redis:/data
       - ${XBOARD_DATA_DIR:-/data/xboard/docker}:/www/.docker/.data
       - ${XBOARD_APP_ENV:-/data/xboard/env}:/www/.env
-      - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
       - ${XBOARD_APP_DATA_PLUGINS:-/data/xboard/plugins}:/www/plugins
+      - ${XBOARD_APP_STORAGE_LOGS:-/data/xboard/storage/logs}:/www/storage/logs
     command: php artisan horizon
 
 networks:
