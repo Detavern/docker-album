@@ -1,19 +1,5 @@
-name: xboard-db
+name: xboard-app
 services:
-  xboard-app-init:
-    image: ghcr.io/cedar2025/xboard:new
-    container_name: xboard-app-init
-    networks:
-      xboard:
-    environment:
-      - docker=true
-    volumes:
-      - xboard-redis-data:/data
-      - xboard-sqlite-data:/www/.docker/.data
-      - ${XBOARD_APP_ENV:-/data/xboard/env}:/www/.env
-      - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
-      - ${XBOARD_APP_DATA_PLUGINS:-/data/xboard/plugins}:/www/plugins
-    command: php artisan xboard:install
   xboard-app-web:
     image: ghcr.io/cedar2025/xboard:new
     hostname: xboard-app-web
