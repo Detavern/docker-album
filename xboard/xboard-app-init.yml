@@ -17,3 +17,16 @@ services:
       - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
       - ${XBOARD_APP_DATA_PLUGINS:-/data/xboard/plugins}:/www/plugins
     command: php artisan xboard:install
+
+networks:
+  xboard:
+    name: xboard
+    external: true
+
+volumes:
+  xboard-redis-data:
+    name: xboard-redis-data
+    external: true
+  xboard-sqlite-data:
+    name: xboard-sqlite-data
+    external: true
