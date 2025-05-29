@@ -11,8 +11,9 @@ services:
     environment:
       - docker=true
     volumes:
-      - xboard-redis-data:/data
+      # - xboard-redis-data:/data
       - xboard-sqlite-data:/www/.docker/.data
+      - xboard-redis-data:/www/.docker/.data/redis
       - ${XBOARD_APP_ENV:-/data/xboard/env}:/www/.env
       - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
       - ${XBOARD_APP_DATA_PLUGINS:-/data/xboard/plugins}:/www/plugins
@@ -25,8 +26,9 @@ services:
     networks:
       xboard:
     volumes:
-      - xboard-redis-data:/data
+      # - xboard-redis-data:/data
       - xboard-sqlite-data:/www/.docker/.data
+      - xboard-redis-data:/www/.docker/.data/redis
       - ${XBOARD_APP_ENV:-/data/xboard/env}:/www/.env
       - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
       - ${XBOARD_APP_DATA_PLUGINS:-/data/xboard/plugins}:/www/plugins
