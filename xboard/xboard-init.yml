@@ -1,13 +1,30 @@
 name: xboard-init
 services:
-  init:
-    image: tianon/true
-    container_name: xboard-init
+  # init:
+  #   image: tianon/true
+  #   container_name: xboard-init
+  #   networks:
+  #     xboard:
+  #   volumes:
+  #     - xboard-redis-data:/mnt/xboard-redis-data
+  #     - xboard-sqlite-data:/mnt/xboard-sqlite-data
+  app-init:
+    image: ghcr.io/cedar2025/xboard:new
+    container_name: xboard-app-init
     networks:
       xboard:
+    environment:
+      - docker=true
+      - ENABLE_SQLITE=true
+      - ENABLE_REDIS=true
+      - ADMIN_ACCOUNT=${XBOARD_ADMIN_ACCOUNT:-admin@example.com}
     volumes:
-      - xboard-redis-data:/mnt/xboard-redis-data
-      - xboard-sqlite-data:/mnt/xboard-sqlite-data
+      - xboard-redis-data:/data
+      - xboard-sqlite-data:/www/.docker/.data
+      - ${XBOARD_APP_ENV:-/data/xboard/env}:/www/.env
+      - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
+      - ${XBOARD_APP_DATA_PLUGINS:-/data/xboard/plugins}:/www/plugins
+    command: php artisan xboard:install
 
 networks:
   xboard:
