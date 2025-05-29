@@ -1,0 +1,15 @@
+name: nginx-proxy-manager
+services:
+  npm:
+    image: jc21/nginx-proxy-manager:latest
+    hostname: npm
+    container_name: npm
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - DISABLE_IPV6=${NPM_DISABLE_IPV6:-false}
+      - INITIAL_ADMIN_EMAIL=${NPM_INITED_ADMIN_EMAIL:-admin@example.com}
+      - INITIAL_ADMIN_PASSWORD=${NPM_INITED_ADMIN_PASSWORD:-dieBaipah7leehoh}
+    volumes:
+      - ${NPM_DATA_DIR:-/data/npm}:/data
+      - ${NPM_LETSENCRYPT_DATA_DIR:-/data/letsencrypt}:/etc/letsencrypt
