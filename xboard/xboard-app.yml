@@ -25,7 +25,7 @@ services:
     networks:
       xboard:
     volumes:
-      - ${XBOARD_DATA_DIR:-/data/xboard/docker}/.docker/.data/redis:/data
+      - ${XBOARD_DATA_DIR:-/data/xboard/docker}/redis:/data
       - ${XBOARD_DATA_DIR:-/data/xboard/docker}:/www/.docker/.data
       - ${XBOARD_APP_ENV:-/data/xboard/env}:/www/.env
       - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
