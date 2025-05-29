@@ -1,0 +1,24 @@
+name: xboard-db
+services:
+  xboard-redis:
+    image: redis:7-alpine
+    hostname: xboard-redis
+    container_name: xboard-redis
+    restart: unless-stopped
+    networks:
+      xboard:
+    volumes:
+      - xboard-redis-data:/data
+    command: >-
+      redis-server --unixsocket /data/redis.sock --unixsocketperm 777
+      --save 900 1 --save 300 10 --save 60 10000
+
+networks:
+  xboard:
+    name: xboard
+    external: true
+
+volumes:
+  xboard-redis-data:
+    name: xboard-redis-data
+    external: true

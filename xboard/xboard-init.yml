@@ -1,0 +1,23 @@
+name: xboard-init
+services:
+  init:
+    container_name: xboard-init
+    image: tianon/true
+    networks:
+      xboard:
+    volumes:
+      - xboard-redis-data:/mnt/xboard-redis-data
+      - xboard-sqlite-data:/mnt/xboard-sqlite-data
+
+networks:
+  xboard:
+    name: xboard
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: docker-xboard
+
+volumes:
+  xboard-redis-data:
+    name: xboard-redis-data
+  xboard-sqlite-data:
+    name: xboard-sqlite-data

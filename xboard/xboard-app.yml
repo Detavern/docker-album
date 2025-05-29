@@ -1,0 +1,46 @@
+name: xboard-db
+services:
+  xboard-app-web:
+    image: ghcr.io/cedar2025/xboard:new
+    hostname: xboard-app-web
+    container_name: xboard-app-web
+    restart: unless-stopped
+    networks:
+      xboard:
+    environment:
+      - docker=true
+    volumes:
+      - ./.env:/www/.env
+      - xboard-redis-data:/data
+      - xboard-sqlite-data:/www/.docker/.data
+      - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
+      # - ./storage/theme:/www/storage/theme
+      - ${XBOARD_APP_DATA_PLUGINS:-/data/xboard/plugins}:/www/plugins
+    command: php artisan octane:start --host=0.0.0.0 --port=7001
+  xboard-app-horizon:
+    image: ghcr.io/cedar2025/xboard:new
+    hostname: xboard-app-horizon
+    container_name: xboard-app-horizon
+    restart: unless-stopped
+    networks:
+      xboard:
+    volumes:
+      - ./.env:/www/.env
+      - xboard-redis-data:/data
+      - xboard-sqlite-data:/www/.docker/.data
+      - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
+      - ${XBOARD_APP_DATA_PLUGINS:-/data/xboard/plugins}:/www/plugins
+    command: php artisan horizon
+
+networks:
+  xboard:
+    name: xboard
+    external: true
+
+volumes:
+  xboard-redis-data:
+    name: xboard-redis-data
+    external: true
+  xboard-sqlite-data:
+    name: xboard-sqlite-data
+    external: true
