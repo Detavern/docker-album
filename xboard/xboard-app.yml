@@ -11,9 +11,8 @@ services:
     environment:
       - docker=true
     volumes:
-      - xboard-redis-data:/data
-      - xboard-sqlite-data:/www/.docker/.data
-      - xboard-redis-data:/www/.docker/.data/redis
+      - ${XBOARD_DATA_DIR:-/data/xboard/docker}/redis:/data
+      - ${XBOARD_DATA_DIR:-/data/xboard/docker}:/www/.docker/.data
       - ${XBOARD_APP_ENV:-/data/xboard/env}:/www/.env
       - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
       - ${XBOARD_APP_DATA_PLUGINS:-/data/xboard/plugins}:/www/plugins
@@ -26,9 +25,8 @@ services:
     networks:
       xboard:
     volumes:
-      - xboard-redis-data:/data
-      - xboard-sqlite-data:/www/.docker/.data
-      - xboard-redis-data:/www/.docker/.data/redis
+      - ${XBOARD_DATA_DIR:-/data/xboard/docker}/.docker/.data/redis:/data
+      - ${XBOARD_DATA_DIR:-/data/xboard/docker}:/www/.docker/.data
       - ${XBOARD_APP_ENV:-/data/xboard/env}:/www/.env
       - ${XBOARD_APP_DATA_STORAGE:-/data/xboard/storage}:/www/storage
       - ${XBOARD_APP_DATA_PLUGINS:-/data/xboard/plugins}:/www/plugins
@@ -37,12 +35,4 @@ services:
 networks:
   xboard:
     name: xboard
-    external: true
-
-volumes:
-  xboard-redis-data:
-    name: xboard-redis-data
-    external: true
-  xboard-sqlite-data:
-    name: xboard-sqlite-data
     external: true
