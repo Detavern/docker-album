@@ -7,6 +7,16 @@ version: 2
 updates:
   # Maintain dependencies within Dockerfiles
   - package-ecosystem: docker
-    directory: docker
+    directory: docker/terminal
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: docker/easytier-bird
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: docker/caddy-plus
     schedule:
       interval: daily
