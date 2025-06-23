@@ -1,4 +1,5 @@
 # syntax=docker/dockerfile:1
+# test: docker build -t caddy-plus .
 FROM caddy:2.10.0-builder AS builder
 RUN xcaddy build \
     --with github.com/caddy-dns/cloudflare \
