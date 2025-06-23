@@ -6,7 +6,7 @@
 version: 2
 updates:
   # Maintain dependencies within Dockerfiles
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "docker" # Location of package manifests
+  - package-ecosystem: docker
+    directory: docker
     schedule:
-      interval: "daily"
+      interval: daily
