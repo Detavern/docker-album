@@ -1,15 +1,15 @@
-name: Docker Image CI for terminal
+name: Docker Image CI for caddy-plus
 
 on:
   push:
     branches: ["master"]
     paths:
-      - "docker/terminal/**"
+      - "docker/caddy-plus/**"
 
   pull_request:
     branches: ["master"]
     paths:
-      - "docker/terminal/**"
+      - "docker/caddy-plus/**"
 
   workflow_dispatch:
     inputs:
@@ -21,6 +21,7 @@ on:
 
 jobs:
   build:
+    name: Build image
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -53,14 +54,14 @@ jobs:
             type=ref,event=branch
             type=raw,value=latest
             type=raw,value=${{ inputs.tag }}
-          images: ghcr.io/detavern/terminal
+          images: ghcr.io/detavern/caddy-plus
 
       - name: Build and push Docker images
         if: steps.docker.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64,linux/arm64,linux/arm
-          context: ./docker/terminal
+          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
+          context: ./docker/caddy-plus
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: true
