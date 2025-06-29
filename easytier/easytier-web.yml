@@ -14,6 +14,11 @@ services:
       - easytier-web-data:/data
     entrypoint: tini -- easytier-web
     command: -d /data/et.db --console-log-level warn
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
 
 networks:
   easytier:

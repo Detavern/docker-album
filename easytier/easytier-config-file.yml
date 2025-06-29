@@ -18,3 +18,8 @@ services:
     volumes:
       - ${EASYTIER_CONFIG_DIR:-/etc/easytier}:/etc/easytier
     command: -c /etc/easytier/config.toml
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"

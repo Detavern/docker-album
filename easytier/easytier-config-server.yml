@@ -18,3 +18,8 @@ services:
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
     command: -w ${EASYTIER_CONFIG_SERVER:-udp://config-server.easytier.cn:22020/admin}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"

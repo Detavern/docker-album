@@ -13,3 +13,8 @@ services:
       - PGID=1000
     volumes:
       - ${DDNS_CONFIG_FILE:-/etc/cloudflare-ddns/config.json}:/config.json
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"

@@ -10,6 +10,11 @@ services:
     volumes:
       - ${FILE_BROWSER_SRV_DIR:-/data/filebrowser/srv}:/srv
       - ${FILE_BROWSER_CONFIG_DB:-/data/filebrowser/config/filebrowser.db}:/database.db
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
     deploy:
       resources:
         limits:

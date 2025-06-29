@@ -13,3 +13,8 @@ services:
     volumes:
       - ${NPM_DATA_DIR:-/data/npm}:/data
       - ${NPM_LETSENCRYPT_DATA_DIR:-/data/letsencrypt}:/etc/letsencrypt
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"

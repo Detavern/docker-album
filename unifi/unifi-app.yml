@@ -33,6 +33,11 @@ services:
       # java memory limit
       - MEM_STARTUP=256
       - MEM_LIMIT=1024
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
     deploy:
       resources:
         limits:
@@ -41,6 +46,7 @@ services:
       unifi-db:
         condition: service_healthy
         restart: true
+
   unifi-db:
     image: mongo:7
     hostname: unifi-db
@@ -65,6 +71,11 @@ services:
       # Limit the wired tiger cache size to 256MB
       - --wiredTigerCacheSizeGB
       - ${MONGO_WIRED_TIGER_CACHE_SIZE:-0.25}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s

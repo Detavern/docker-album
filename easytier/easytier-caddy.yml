@@ -18,6 +18,11 @@ services:
       - ${EASYTIER_CADDY_CONFIG_FILE:-/etc/easytier/caddy/Caddyfile}:/etc/caddy/Caddyfile
       - easytier-caddy-data:/data
       - easytier-caddy-config:/config
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
 
 networks:
   easytier:

@@ -23,3 +23,8 @@ services:
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
       - /etc/bird:/etc/bird
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
