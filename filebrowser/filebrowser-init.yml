@@ -1,0 +1,17 @@
+name: filebrowser-init
+services:
+  init:
+    image: tianon/true
+    container_name: filebrowser-init
+    networks:
+      filebrowser:
+
+networks:
+  filebrowser:
+    name: filebrowser
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: docker-fb
+    ipam:
+      config:
+        - subnet: ${NET_CIDR_IPV4:?}

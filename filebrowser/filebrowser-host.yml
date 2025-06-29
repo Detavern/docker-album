@@ -1,0 +1,22 @@
+name: filebrowser-host
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    hostname: filebrowser
+    container_name: filebrowser
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ${FILE_BROWSER_SRV_DIR:-/data/srv}:/srv
+      - ${FILE_BROWSER_DATA_DB:-/data/filebrowser/filebrowser.db}:/database.db
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512mb
