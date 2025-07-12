@@ -5,7 +5,8 @@ services:
     hostname: seafile-mariadb
     container_name: seafile-mariadb
     networks:
-      seafile: null
+      seafile:
+        ipv4_address: ${NET_ADDR_DB_IPV4:-172.18.41.8}
     environment:
       - MYSQL_ROOT_PASSWORD=${SEAFILE_MYSQL_ROOT_PASSWORD:?}
       - MYSQL_LOG_CONSOLE=true
@@ -25,7 +26,7 @@ services:
       retries: 10
 
   seafile-memcached:
-    image: ${SEAFILE_MEMCACHED_IMAGE:-memcached:1.6.29}
+    image: ${SEAFILE_MEMCACHED_IMAGE:-memcached:1.6}
     hostname: seafile-memcached
     container_name: seafile-memcached
     networks:
