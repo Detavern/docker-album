@@ -29,6 +29,11 @@ services:
       - SEADOC_SERVER_URL=${SEAFILE_SERVER_PROTOCOL:-https}://${SEAFILE_SERVER_HOSTNAME:?}/sdoc-server
     volumes:
       - ${SEAFILE_SERVER_DATA_DIR:-/opt/seafile/app}:/shared
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
 
   seafile-seadoc:
     image: ${SEAFILE_SEADOC_IMAGE:-seafileltd/sdoc-server:1.0-latest}
@@ -49,6 +54,11 @@ services:
       - SEAHUB_SERVICE_URL=${SEAFILE_SERVER_PROTOCOL:-https}://${SEAFILE_SERVER_HOSTNAME:?}
     volumes:
       - ${SEAFILE_SEADOC_DATA_DIR:-/opt/seafile/seadoc}:/shared
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
 
 networks:
   seafile:

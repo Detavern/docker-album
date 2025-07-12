@@ -24,6 +24,11 @@ services:
       start_period: 30s
       timeout: 5s
       retries: 10
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
 
   seafile-memcached:
     image: ${SEAFILE_MEMCACHED_IMAGE:-memcached:1.6}
@@ -31,7 +36,14 @@ services:
     container_name: seafile-memcached
     networks:
       seafile: null
-    entrypoint: memcached -m 256
+    command:
+      - -v
+      - --memory-limit=256
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
 
 networks:
   seafile:
