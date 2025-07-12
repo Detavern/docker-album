@@ -41,7 +41,7 @@ services:
       - DB_PORT=3306
       - DB_USER=${SEAFILE_SERVER_DB_USER:-seafile}
       - DB_PASSWORD=${SEAFILE_SERVER_DB_PASSWORD:?}
-      - DB_NAME=seahub_db
+      - DB_NAME=${SEAFILE_MYSQL_DB_SEAHUB_DB_NAME:-seahub_db}
       - TIME_ZONE=${TIME_ZONE:-Etc/UTC}
       - JWT_PRIVATE_KEY=${SEAFILE_SERVER_JWT_PRIVATE_KEY:?}
       - NON_ROOT=false
