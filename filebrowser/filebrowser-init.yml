@@ -5,6 +5,7 @@ services:
     container_name: filebrowser-init
     networks:
       filebrowser:
+        ipv4_address: ${NET_ADDR_INIT_IPV4:-172.18.40.254}
 
 networks:
   filebrowser:
