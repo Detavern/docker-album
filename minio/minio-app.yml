@@ -1,0 +1,29 @@
+name: minio-app
+services:
+  minio-server:
+    image: ${MINIO_SERVER_IMAGE:-minio/minio:latest}
+    hostname: minio-server
+    container_name: minio-server
+    networks:
+      minio:
+        ipv4_address: ${NET_ADDR_SERVER_IPV4:-172.18.42.10}
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-admin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:?}
+    volumes:
+      - ${MINIO_DATA_DIR:-/opt/minio/data}:/data
+    command:
+      - server
+      - --console-address
+      - ":9001"
+      - /data
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
+
+networks:
+  minio:
+    name: minio
+    external: true
