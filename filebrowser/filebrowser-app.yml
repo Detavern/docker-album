@@ -10,7 +10,7 @@ services:
         ipv4_address: ${NET_ADDR_SERVER_IPV4:-172.18.40.10}
     volumes:
       - ${FILE_BROWSER_SERVE_DIR:-/data/filebrowser/srv}:/srv
-      - ${FILE_BROWSER_DATA_DB:-/data/filebrowser/filebrowser.db}:/database.db
+      - ${FILE_BROWSER_DATA_DB:-/data/filebrowser/filebrowser.db}:/database/filebrowser.db
     logging:
       driver: json-file
       options:
