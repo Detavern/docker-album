@@ -35,7 +35,7 @@ services:
     hostname: seafile-seadoc
     container_name: seafile-seadoc
     networks:
-      seafile: null
+      ipv4_address: ${NET_ADDR_SEADOC_IPV4:-172.18.41.11}
     environment:
       - DB_HOST=seafile-mariadb
       - DB_PORT=3306
