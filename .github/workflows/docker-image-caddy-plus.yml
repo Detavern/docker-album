@@ -38,7 +38,7 @@ jobs:
       - name: Extract version from Dockerfile
         id: version
         run: |
-          LINE=$(grep -A1 '# @version' docker/{{ env.DOCKER_DIR }}/Dockerfile | tail -n1)
+          LINE=$(grep -A1 '# @version' docker/${DOCKER_DIR}/Dockerfile | tail -n1)
           echo "Matched line: $LINE"
 
           VERSION=$(echo "$LINE" | sed -E 's/^FROM [^:]+:([^ ]+).*/\1/')
