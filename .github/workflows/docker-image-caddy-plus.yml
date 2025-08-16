@@ -70,13 +70,14 @@ jobs:
           INPUT_TAG="${{ inputs.tag }}"
 
           if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" && "${INPUT_TAG}" != "latest" ]]; then
-            TAGS="${INPUT_TAG}"
+            TAGS="type=raw,value=${INPUT_TAG}"
           else
-            TAGS="latest,${BASE_VERSION}"
+            TAGS="type=raw,value=latest\ntype=raw,value=${BASE_VERSION}"
           fi
 
-          echo "computed_tags=$TAGS" >> $GITHUB_OUTPUT
-          echo "Computed tags: $TAGS"
+          # Save as multi-line output
+          echo -e "computed_tags=$TAGS" >> $GITHUB_OUTPUT
+          echo -e "Computed tags: $TAGS"
 
       - name: Docker meta
         id: meta
