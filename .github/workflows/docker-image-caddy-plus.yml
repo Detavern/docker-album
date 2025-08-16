@@ -80,7 +80,6 @@ jobs:
 
       - name: Docker meta
         id: meta
-        if: github.event_name == 'workflow_dispatch' && inputs.tag != 'latest'
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/detavern/${{ env.DOCKER_DIR }}
