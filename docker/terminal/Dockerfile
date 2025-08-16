@@ -1,4 +1,5 @@
-FROM debian:bookworm
+# @version
+FROM debian:12.9
 
 # apt
 RUN apt-get update && \
