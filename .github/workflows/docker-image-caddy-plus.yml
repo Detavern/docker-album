@@ -16,8 +16,11 @@ on:
       tag:
         description: "The tag version you want to build"
         required: false
-        default: "latest"
+        default: ""
         type: string
+
+env:
+  DOCKER_DIR: caddy-plus
 
 jobs:
   build:
@@ -31,6 +34,21 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - name: Extract version from Dockerfile
+        id: version
+        run: |
+          LINE=$(grep -A1 '# @version' docker/{{ env.DOCKER_DIR }}/Dockerfile | tail -n1)
+          echo "Matched line: $LINE"
+
+          VERSION=$(echo "$LINE" | sed -E 's/^FROM [^:]+:([^ ]+).*/\1/')
+          if [ -z "$VERSION" ]; then
+            echo "Could not extract version from Dockerfile"
+            exit 1
+          fi
+
+          echo "base_version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Found version: $VERSION"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -47,21 +65,19 @@ jobs:
 
       - name: Docker meta
         id: meta
-        if: steps.docker.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         uses: docker/metadata-action@v5
         with:
+          images: ghcr.io/detavern/{{ env.DOCKER_DIR }}
           tags: |
-            type=ref,event=branch
             type=raw,value=latest
-            type=raw,value=${{ inputs.tag }}
-          images: ghcr.io/detavern/caddy-plus
+            type=raw,value=${{ steps.version.outputs.base_version }}
+            type=raw,value=${{ inputs.extra_tag }}
 
       - name: Build and push Docker images
-        if: steps.docker.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
-          context: ./docker/caddy-plus
+          platforms: linux/amd64,linux/arm64
+          context: ./docker/{{ env.DOCKER_DIR }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: true
