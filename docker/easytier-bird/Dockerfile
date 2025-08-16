@@ -1,4 +1,4 @@
-FROM easytier/easytier:latest AS dumper
+FROM easytier/easytier:v2.3.2 AS dumper
 
 FROM alpine:latest
 
