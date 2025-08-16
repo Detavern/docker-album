@@ -20,7 +20,8 @@ on:
         type: string
 
 env:
-  DOCKER_DIR: caddy-plus
+  IMAGE_NAME: caddy-plus
+  DOCKERFILE_DIR: caddy-plus
 
 jobs:
   build:
@@ -38,7 +39,7 @@ jobs:
       - name: Extract version from Dockerfile
         id: version
         run: |
-          LINE=$(grep -A1 '# @version' docker/${DOCKER_DIR}/Dockerfile | tail -n1)
+          LINE=$(grep -A1 '# @version' docker/${DOCKERFILE_DIR}/Dockerfile | tail -n1)
           echo "Matched line: $LINE"
 
           VERSION=$(echo "$LINE" | sed -E 's/^FROM [^:]+:([^ ]+).*/\1/')
@@ -66,7 +67,7 @@ jobs:
       - name: Compute Docker tags
         id: docker_tags
         run: |
-          BASE_VERSION=${{ steps.version.outputs.base_version }}
+          BASE_VERSION="${{ steps.version.outputs.base_version }}"
           INPUT_TAG="${{ inputs.tag }}"
 
           if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" && "${INPUT_TAG}" != "latest" ]]; then
@@ -75,22 +76,24 @@ jobs:
             TAGS="type=raw,value=latest\ntype=raw,value=${BASE_VERSION}"
           fi
 
-          # Save as multi-line output
-          echo -e "computed_tags=$TAGS" >> $GITHUB_OUTPUT
-          echo -e "Computed tags: $TAGS"
+          echo 'computed_tags<<EOF' >> $GITHUB_OUTPUT
+          echo -e "$TAGS" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+          echo "Computed tags: $TAGS"
 
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/detavern/${{ env.DOCKER_DIR }}
+          images: ghcr.io/detavern/${{ env.IMAGE_NAME }}
           tags: ${{ steps.docker_tags.outputs.computed_tags }}
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
-          context: ./docker/${{ env.DOCKER_DIR }}
+          context: ./docker/${{ env.DOCKERFILE_DIR }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: true
