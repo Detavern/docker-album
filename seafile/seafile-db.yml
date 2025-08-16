@@ -1,0 +1,51 @@
+name: seafile-db
+services:
+  seafile-mariadb:
+    image: ${SEAFILE_DB_IMAGE:-mariadb:10.11}
+    hostname: seafile-mariadb
+    container_name: seafile-mariadb
+    networks:
+      seafile:
+        ipv4_address: ${NET_ADDR_DB_IPV4:-172.18.41.8}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${SEAFILE_MYSQL_ROOT_PASSWORD:?}
+      - MYSQL_LOG_CONSOLE=true
+      - MARIADB_AUTO_UPGRADE=1
+    volumes:
+      - "${SEAFILE_MYSQL_DATA_DIR:-/opt/seafile/mysql}:/var/lib/mysql"
+    healthcheck:
+      test:
+        - CMD
+        - /usr/local/bin/healthcheck.sh
+        - --connect
+        - --mariadbupgrade
+        - --innodb_initialized
+      interval: 20s
+      start_period: 30s
+      timeout: 5s
+      retries: 10
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
+
+  seafile-memcached:
+    image: ${SEAFILE_MEMCACHED_IMAGE:-memcached:1.6}
+    hostname: seafile-memcached
+    container_name: seafile-memcached
+    networks:
+      seafile: null
+    command:
+      - -v
+      - --memory-limit=256
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
+
+networks:
+  seafile:
+    name: seafile
+    external: true

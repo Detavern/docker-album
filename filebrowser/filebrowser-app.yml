@@ -1,21 +1,21 @@
 name: filebrowser-app
 services:
-  filebrowser:
-    image: filebrowser/filebrowser:latest
-    hostname: filebrowser
-    container_name: filebrowser
+  filebrowser-server:
+    image: ${FILE_BROWSER_SERVER_IMAGE:-filebrowser/filebrowser:latest}
+    hostname: filebrowser-server
+    container_name: filebrowser-server
     restart: unless-stopped
     networks:
       filebrowser:
-        ipv4_address: ${NET_ADDR_APP_WEB_IPV4:?}
+        ipv4_address: ${NET_ADDR_SERVER_IPV4:-172.18.40.10}
     volumes:
-      - ${FILE_BROWSER_SRV_DIR:-/data/srv}:/srv
-      - ${FILE_BROWSER_DATA_DB:-/data/filebrowser/filebrowser.db}:/database.db
+      - ${FILE_BROWSER_SERVE_DIR:-/data/filebrowser/srv}:/srv
+      - ${FILE_BROWSER_DATA_DB:-/data/filebrowser/filebrowser.db}:/database/filebrowser.db
     logging:
-      driver: "json-file"
+      driver: json-file
       options:
-        max-size: "50m"
-        max-file: "3"
+        max-size: 50m
+        max-file: 3
     deploy:
       resources:
         limits:

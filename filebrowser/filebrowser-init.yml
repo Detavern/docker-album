@@ -5,6 +5,7 @@ services:
     container_name: filebrowser-init
     networks:
       filebrowser:
+        ipv4_address: ${NET_ADDR_INIT_IPV4:-172.18.40.254}
 
 networks:
   filebrowser:
@@ -14,4 +15,4 @@ networks:
       com.docker.network.bridge.name: docker-fb
     ipam:
       config:
-        - subnet: ${NET_CIDR_IPV4:?}
+        - subnet: ${NET_CIDR_IPV4:-172.18.40.0/24}
