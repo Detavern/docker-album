@@ -16,7 +16,7 @@ on:
       tag:
         description: "The tag version you want to build"
         required: false
-        default: ""
+        default: "latest"
         type: string
 
 env:
@@ -63,21 +63,34 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Compute Docker tags
+        id: docker_tags
+        run: |
+          BASE_VERSION=${{ steps.version.outputs.base_version }}
+          INPUT_TAG="${{ inputs.tag }}"
+
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" && "${INPUT_TAG}" != "latest" ]]; then
+            TAGS="${INPUT_TAG}"
+          else
+            TAGS="latest,${BASE_VERSION}"
+          fi
+
+          echo "computed_tags=$TAGS" >> $GITHUB_OUTPUT
+          echo "Computed tags: $TAGS"
+
       - name: Docker meta
         id: meta
+        if: github.event_name == 'workflow_dispatch' && inputs.tag != 'latest'
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/detavern/{{ env.DOCKER_DIR }}
-          tags: |
-            type=raw,value=latest
-            type=raw,value=${{ steps.version.outputs.base_version }}
-            type=raw,value=${{ inputs.extra_tag }}
+          images: ghcr.io/detavern/${{ env.DOCKER_DIR }}
+          tags: ${{ steps.docker_tags.outputs.computed_tags }}
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
-          context: ./docker/{{ env.DOCKER_DIR }}
+          context: ./docker/${{ env.DOCKER_DIR }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: true
