@@ -19,8 +19,13 @@ on:
         default: "latest"
         type: string
 
+env:
+  IMAGE_NAME: easytier-bird
+  DOCKERFILE_DIR: easytier-bird
+
 jobs:
   build:
+    name: Build image
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -29,53 +34,66 @@ jobs:
       - name: Checkout repository and submodules
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-          ref: ${{ github.ref }}
           submodules: recursive
 
-      - name: Check if docker directory changed
-        id: docker
+      - name: Extract version from Dockerfile
+        id: version
         run: |
-          if git diff --diff-filter=d --name-only ${{ github.event.before }} ${{ github.sha }} \
-            | grep '^docker/easytier-bird/'; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
+          LINE=$(grep -A1 '# @version' docker/${DOCKERFILE_DIR}/Dockerfile | tail -n1)
+          echo "Matched line: $LINE"
+
+          VERSION=$(echo "$LINE" | sed -E 's/^FROM [^:]+:([^ ]+).*/\1/')
+          if [ -z "$VERSION" ]; then
+            echo "Could not extract version from Dockerfile"
+            exit 1
           fi
 
+          echo "base_version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Found version: $VERSION"
+
       - name: Set up QEMU
-        if: steps.docker.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
-        if: steps.docker.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         uses: docker/setup-buildx-action@v3
 
       - name: Login to GitHub Container Registry
-        if: steps.docker.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Compute Docker tags
+        id: docker_tags
+        run: |
+          BASE_VERSION="${{ steps.version.outputs.base_version }}"
+          INPUT_TAG="${{ inputs.tag }}"
+
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" && "${INPUT_TAG}" != "latest" ]]; then
+            TAGS="type=raw,value=${INPUT_TAG}"
+          else
+            TAGS="type=raw,value=latest\ntype=raw,value=${BASE_VERSION}"
+          fi
+
+          echo 'computed_tags<<EOF' >> $GITHUB_OUTPUT
+          echo -e "$TAGS" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+          echo "Computed tags: $TAGS"
+
       - name: Docker meta
         id: meta
-        if: steps.docker.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         uses: docker/metadata-action@v5
         with:
-          tags: |
-            type=ref,event=branch
-            type=raw,value=latest
-            type=raw,value=${{ inputs.tag }}
-          images: ghcr.io/detavern/easytier-bird
+          images: ghcr.io/detavern/${{ env.IMAGE_NAME }}
+          tags: ${{ steps.docker_tags.outputs.computed_tags }}
 
       - name: Build and push Docker images
-        if: steps.docker.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
-          context: ./docker/easytier-bird
+          context: ./docker/${{ env.DOCKERFILE_DIR }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: true
