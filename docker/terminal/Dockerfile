@@ -1,5 +1,5 @@
 # @version
-FROM debian:12.9
+FROM debian:12.11
 
 # apt
 RUN apt-get update && \
