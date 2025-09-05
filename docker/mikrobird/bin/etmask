@@ -1,0 +1,33 @@
+#!/bin/bash
+# et-masq.sh - setup iptables-legacy masquerade rules
+# For source subnets 192.168.0.0/16 and 172.12.0.0/16
+# Excluding internal destinations
+
+set -e
+
+CHAIN="ET-MASQ"
+
+# flush or create
+if iptables-legacy -t nat -nL $CHAIN >/dev/null 2>&1; then
+    echo "[INFO] Chain $CHAIN exists, flushing..."
+    iptables-legacy -t nat -F $CHAIN
+else
+    echo "[INFO] Creating chain $CHAIN..."
+    iptables-legacy -t nat -N $CHAIN
+fi
+
+# 添加入口跳转规则（避免重复先删除）
+iptables-legacy -t nat -D POSTROUTING -s 192.168.0.0/16 -j $CHAIN 2>/dev/null || true
+iptables-legacy -t nat -D POSTROUTING -s 172.16.0.0/12 -j $CHAIN 2>/dev/null || true
+iptables-legacy -t nat -A POSTROUTING -s 192.168.0.0/16 -j $CHAIN
+iptables-legacy -t nat -A POSTROUTING -s 172.16.0.0/12 -j $CHAIN
+
+# 内部网段直接 RETURN
+iptables-legacy -t nat -A $CHAIN -d 10.0.0.0/8       -j RETURN
+iptables-legacy -t nat -A $CHAIN -d 172.16.0.0/12    -j RETURN
+iptables-legacy -t nat -A $CHAIN -d 192.168.0.0/16   -j RETURN
+
+# 其他目的地址走 MASQUERADE
+iptables-legacy -t nat -A $CHAIN -j MASQUERADE
+
+echo "[OK] ET-MASQ chain installed"

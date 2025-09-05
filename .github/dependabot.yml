@@ -17,6 +17,11 @@ updates:
       interval: daily
 
   - package-ecosystem: docker
+    directory: docker/mikrobird
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
     directory: docker/caddy-plus
     schedule:
       interval: daily
