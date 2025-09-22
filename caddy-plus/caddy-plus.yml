@@ -1,0 +1,30 @@
+name: caddy-plus
+services:
+  caddy-plus:
+    image: ${CADDY_IMAGE:-ghcr.io/detavern/caddy-plus:latest}
+    hostname: caddy-plus
+    container_name: caddy-plus
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      CADDY_CF_API_TOKEN: ${CADDY_CF_API_TOKEN:?}
+    volumes:
+      - ${CADDY_CONFIG_FILE:-/etc/caddy/Caddyfile}:/etc/caddy/Caddyfile
+      - ${CADDY_SRV_DIR:-/data/caddy/srv}:/srv
+      - caddy-plus-data:/data
+      - caddy-plus-config:/config
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: ${CADDY_MEM_LIMIT:-256}mb
+
+volumes:
+  caddy-plus-data:
+    name: caddy-plus-data
+  caddy-plus-config:
+    name: caddy-plus-config
