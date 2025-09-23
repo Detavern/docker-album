@@ -1,9 +1,9 @@
-name: easytier-bird
+name: easybird
 services:
-  easytier-bird:
-    image: ${EASYTIER_BIRD_IMAGE:-ghcr.io/detavern/easytier-bird:latest}
-    hostname: ${EASYTIER_HOSTNAME:-easytier-bird}
-    container_name: easytier-bird
+  easybird:
+    image: ${EASYBIRD_IMAGE:-ghcr.io/detavern/easybird:latest}
+    hostname: ${EASYBIRD_HOSTNAME:-easybird}
+    container_name: easybird
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
@@ -16,8 +16,6 @@ services:
       - EASYTIER_CONFIG_SERVER=${EASYTIER_CONFIG_SERVER:?}
       - BIRD_ROUTER_ID=${BIRD_ROUTER_ID:?}
       - BIRD_STATIC_IPV6_ENABLED=0
-      - BIRD_OSPF_V2_ENABLED=0
-      - BIRD_OSPF_V3_ENABLED=0
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
@@ -28,3 +26,7 @@ services:
       options:
         max-size: "50m"
         max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: ${EASYBIRD_MEM_LIMIT:-256}mb

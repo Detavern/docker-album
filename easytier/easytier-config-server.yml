@@ -23,3 +23,7 @@ services:
       options:
         max-size: "50m"
         max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: ${EASYTIER_MEM_LIMIT:-256}mb

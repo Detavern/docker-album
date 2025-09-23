@@ -1,16 +1,16 @@
-name: easytier-bird
+name: easybird
 services:
-  easytier-bird:
-    image: ${EASYTIER_BIRD_IMAGE:-ghcr.io/detavern/easytier-bird:latest}
-    hostname: ${EASYTIER_HOSTNAME:-easytier-bird}
-    container_name: easytier-bird
+  easybird:
+    image: ${EASYBIRD_IMAGE:-ghcr.io/detavern/easybird:latest}
+    hostname: ${EASYBIRD_HOSTNAME:-easybird}
+    container_name: easybird
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     networks:
-      easytier:
-        ipv4_address: 172.18.11.11
-        ipv6_address: fd00:172:18:11::11/64
+      easybird:
+        ipv4_address: 172.18.18.18
+        ipv6_address: fd00:172:18:18::18/64
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -30,18 +30,22 @@ services:
       options:
         max-size: "50m"
         max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: ${EASYBIRD_MEM_LIMIT:-256}mb
 
 networks:
-  easytier:
-    name: easytier
+  easybird:
+    name: easybird
     driver: bridge
     enable_ipv6: true
     driver_opts:
-      com.docker.network.bridge.name: docker-et
+      com.docker.network.bridge.name: docker-easybird
       com.docker.network.bridge.enable_icc: "true"
       com.docker.network.bridge.enable_ip_masquerade: "true"
       com.docker.network.driver.mtu: "1380"
     ipam:
       config:
-        - subnet: 172.18.11.0/24
-        - subnet: fd00:172:18:11::/64
+        - subnet: 172.18.18.0/24
+        - subnet: fd00:172:18:18::/64
