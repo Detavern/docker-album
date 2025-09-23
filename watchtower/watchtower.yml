@@ -1,12 +1,21 @@
 name: watchtower
 services:
   watchtower:
-    image: containrrr/watchtower:latest
+    image: ${WATCHTOWER_IMAGE:-containrrr/watchtower:latest}
     hostname: watchtower
     container_name: watchtower
     restart: unless-stopped
     environment:
       - TZ=UTC
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${WATCHTOWER_CONTAINER_SOCKET_PATH:-/var/run/docker.sock}:/var/run/docker.sock
     command: --schedule "0 0 20 * * 0" --cleanup --label-enable
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: ${WATCHTOWER_MEM_LIMIT:-128}mb
