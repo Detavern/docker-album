@@ -5,6 +5,7 @@ set -euo pipefail
 # first run
 FIRST_RUN="/root/.firstrun"
 MACHINE_ID_FILE="/etc/machine-id"
+CRON_ROOT_FILE="/etc/crontabs/root"
 BIRD_TMPL_DIR="/root/templates"
 BIRD_CONF_DIR="/etc/bird"
 BIRD_CONF_FILE="${BIRD_CONF_DIR}/bird.conf"
@@ -78,7 +79,10 @@ if [ ! -f "${FIRST_RUN}" ]; then
     mkdir -p ${BIRD_CONF_STATIC6_DIR}
 
     # add cron
-    echo -e "0\t17\t*\t*\t*\tbirdh load" >> /etc/crontabs/root
+    echo -e "0\t17\t*\t*\t*\tbirdh load" >> $CRON_ROOT_FILE
+    echo -e "\n# startup" >> $CRON_ROOT_FILE
+    echo -e "@reboot sleep 5 && etmask" >> $CRON_ROOT_FILE
+    echo -e "@reboot sleep 6 && birdh load" >> $CRON_ROOT_FILE
 
     # write
     touch ${FIRST_RUN}

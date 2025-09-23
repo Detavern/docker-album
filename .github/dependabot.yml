@@ -12,7 +12,7 @@ updates:
       interval: daily
 
   - package-ecosystem: docker
-    directory: docker/easytier-bird
+    directory: docker/easybird
     schedule:
       interval: daily
 

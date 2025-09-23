@@ -13,7 +13,7 @@ RUN apk upgrade --no-cache && \
 COPY --from=dumper /usr/local/bin/* /usr/local/bin
 COPY service.ini /etc/supervisor.d/
 COPY entrypoint.sh /usr/local/bin/
-COPY birdh /usr/local/bin/
+COPY bin/ /usr/local/bin/
 COPY templates /root/templates/
 
 ENV BIRD_CONF_TMPL=bird

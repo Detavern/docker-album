@@ -1,3 +1,3 @@
 # MikroBird
 
-My bird container that running inside mikrotik router.
+My EasyTier + bird2 container that running inside mikrotik router.

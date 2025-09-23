@@ -1,1 +1,0 @@
-# easytier-bird
