@@ -1,0 +1,25 @@
+name: pot-hubproxy
+services:
+  hubproxy:
+    image: ghcr.io/sky22333/hubproxy:latest
+    hostname: hubproxy
+    container_name: pot-hubproxy
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      traefik.enable: "true"
+      traefik.http.routers.hubproxy.rule: "Host(`hubproxy.pot`)"
+      traefik.http.routers.hubproxy.entrypoints: "web"
+      traefik.http.services.hubproxy.loadbalancer.server.port: "5000"
+    restart: unless-stopped
+    networks:
+      - traepot
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
+
+networks:
+  traepot:
+    name: traepot
+    external: true
