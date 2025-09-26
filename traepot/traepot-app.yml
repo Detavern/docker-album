@@ -17,6 +17,10 @@ services:
       - --api.insecure=true
       - --providers.docker=true
       - --entrypoints.web.address=:80
+      - --log.level=INFO
+      - --log.format=common
+      - --accesslog=true
+      - --accesslog.format=json
     logging:
       driver: json-file
       options:
