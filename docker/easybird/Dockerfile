@@ -1,5 +1,5 @@
 # @version
-FROM easytier/easytier:v2.4.4 AS dumper
+FROM easytier/easytier:v2.4.5 AS dumper
 
 FROM alpine:latest
 
