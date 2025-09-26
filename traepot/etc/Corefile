@@ -1,6 +1,6 @@
 .:53 {
-    template IN A {
-        match ^(.*)\.pot$
+    template IN A pot {
+        match ^(.+)\.pot$
         answer "{{.Name}} 60 IN A 172.18.1.2"
     }
     log
