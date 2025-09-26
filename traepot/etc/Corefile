@@ -1,6 +1,6 @@
-pot {
+.:53 {
     hosts {
-        172.18.1.2 *.pot
+        *.pot 172.18.1.2
         fallthrough
     }
     log
