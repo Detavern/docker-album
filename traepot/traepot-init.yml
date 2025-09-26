@@ -4,16 +4,16 @@ services:
     container_name: traepot-init
     image: tianon/true
     networks:
-      traepot:
+      potnet:
         ipv4_address: ${NET_ADDR_INIT_IPV4:-172.18.1.254}
 
 networks:
-  traepot:
-    name: traepot
+  potnet:
+    name: potnet
     driver: bridge
     enable_ipv6: true
     driver_opts:
-      com.docker.network.bridge.name: docker-traepot
+      com.docker.network.bridge.name: docker-potnet
       com.docker.network.bridge.enable_icc: "true"
       com.docker.network.bridge.enable_ip_masquerade: "true"
       com.docker.network.driver.mtu: ${NET_MTU:-1500}

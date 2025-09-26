@@ -8,7 +8,7 @@ services:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     networks:
-      traepot:
+      potnet:
         ipv4_address: ${NET_ADDR_TRAEFIK_IPV4:-172.18.1.2}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -31,7 +31,7 @@ services:
       com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     networks:
-      traepot:
+      potnet:
         ipv4_address: ${NET_ADDR_COREDNS_IPV4:-172.18.1.3}
     volumes:
       - ./etc/Corefile:/Corefile
@@ -42,6 +42,6 @@ services:
         max-file: 3
 
 networks:
-  traepot:
-    name: traepot
+  potnet:
+    name: potnet
     external: true

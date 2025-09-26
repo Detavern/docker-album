@@ -12,7 +12,7 @@ services:
       traefik.http.services.hubproxy.loadbalancer.server.port: "5000"
     restart: unless-stopped
     networks:
-      - traepot
+      - potnet
     logging:
       driver: json-file
       options:
@@ -20,6 +20,6 @@ services:
         max-file: 3
 
 networks:
-  traepot:
-    name: traepot
+  potnet:
+    name: potnet
     external: true
