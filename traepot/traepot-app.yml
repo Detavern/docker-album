@@ -1,0 +1,43 @@
+name: traepot-app
+services:
+  traefik:
+    image: traefik:latest
+    hostname: traefik
+    container_name: traepot-traefik
+    restart: unless-stopped
+    networks:
+      traepot:
+        ipv4_address: ${NET_ADDR_TRAEFIK_IPV4:-172.18.1.2}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command:
+      - --api.dashboard=true
+      - --api.insecure=true
+      - --providers.docker=true
+      - --entrypoints.web.address=:80
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
+
+  coredns:
+    image: coredns/coredns:latest
+    hostname: coredns
+    container_name: traepot-coredns
+    restart: unless-stopped
+    networks:
+      traepot:
+        ipv4_address: ${NET_ADDR_COREDNS_IPV4:-172.18.1.3}
+    volumes:
+      - ./etc/Corefile:/Corefile
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
+
+networks:
+  traepot:
+    name: traepot
+    external: true
