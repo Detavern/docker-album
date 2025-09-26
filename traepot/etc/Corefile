@@ -1,4 +1,4 @@
-.pot {
+pot {
     hosts {
         172.18.1.2 *.pot
         fallthrough
