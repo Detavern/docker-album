@@ -4,6 +4,8 @@ services:
     image: traefik:latest
     hostname: traefik
     container_name: traepot-traefik
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     networks:
       traepot:
@@ -25,6 +27,8 @@ services:
     image: coredns/coredns:latest
     hostname: coredns
     container_name: traepot-coredns
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     networks:
       traepot:
