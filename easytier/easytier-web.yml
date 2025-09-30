@@ -4,11 +4,14 @@ services:
     image: ${EASYTIER_IMAGE:-easytier/easytier:latest}
     hostname: easytier-web
     container_name: easytier-web
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     networks:
       easytier:
         ipv4_address: 172.18.11.3
     ports:
+      - 0.0.0.0:22020:22020
       - 0.0.0.0:22020:22020/udp
     volumes:
       - easytier-web-data:/data
