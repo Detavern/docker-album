@@ -16,7 +16,11 @@ services:
     volumes:
       - easytier-web-data:/data
     entrypoint: tini -- easytier-web
-    command: -d /data/et.db --console-log-level warn
+    command: >-
+      -d /data/et.db
+      -c ${EASYTIER_CONFIG_SERVER_PORT:-22020}
+      -p ${EASYTIER_CONFIG_SERVER_PROTOCOL:-udp}
+      --console-log-level warn
     logging:
       driver: "json-file"
       options:
