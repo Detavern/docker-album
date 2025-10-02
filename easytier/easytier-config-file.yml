@@ -27,7 +27,3 @@ services:
       resources:
         limits:
           memory: ${EASYTIER_MEM_LIMIT:-256}mb
-    deploy:
-      resources:
-        limits:
-          memory: ${WATCHTOWER_MEM_LIMIT:-128}mb
