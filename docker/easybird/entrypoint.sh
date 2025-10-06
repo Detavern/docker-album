@@ -81,7 +81,6 @@ if [ ! -f "${FIRST_RUN}" ]; then
     # add cron
     echo -e "0\t17\t*\t*\t*\tbirdh load" >> $CRON_ROOT_FILE
     echo -e "\n# startup" >> $CRON_ROOT_FILE
-    echo -e "@reboot sleep 5 && etmask" >> $CRON_ROOT_FILE
     echo -e "@reboot sleep 6 && birdh load" >> $CRON_ROOT_FILE
 
     # write
