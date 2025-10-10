@@ -5,6 +5,8 @@ services:
     hostname: unifi-app
     container_name: unifi-app
     restart: unless-stopped
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     networks:
       unifi:
     ports:
