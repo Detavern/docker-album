@@ -1,0 +1,52 @@
+name: unifi-app
+services:
+  unifi-db:
+    image: mongo:7
+    hostname: unifi-db
+    container_name: unifi-db
+    restart: unless-stopped
+    networks:
+      unifi:
+    volumes:
+      - unifi-db-data:/data/db
+      # mount scripts
+      - ./scripts/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+    environment:
+      # root
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:?}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-admin}
+      # user created by script
+      INIT_SCRIPT_USERNAME: ${UNIFI_MONGO_USERNAME:-unifi}
+      INIT_SCRIPT_PASSWORD: ${UNIFI_MONGO_PASSWORD:?}
+      INIT_SCRIPT_DATABASE: ${UNIFI_MONGO_DATABASE:-unifi}
+    command:
+      # Limit the wired tiger cache size to 256MB
+      - --wiredTigerCacheSizeGB
+      - ${MONGO_WIRED_TIGER_CACHE_SIZE:-0.25}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 768mb
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  unifi:
+    name: unifi
+    external: true
+
+volumes:
+  unifi-db-data:
+    name: unifi-db-data
+    external: true
