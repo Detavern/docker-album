@@ -16,8 +16,8 @@ services:
       # web admin
       # - 8443:8443
       # guest portal
-      - 8880:8880
-      - 8843:8843
+      # - 8880:8880
+      # - 8843:8843
       # stun
       - 3478:3478/udp
       # remote syslog
