@@ -1,4 +1,4 @@
-name: unifi-app
+name: unifi-db
 services:
   unifi-db:
     image: mongo:7
