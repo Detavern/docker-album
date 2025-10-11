@@ -5,15 +5,21 @@ services:
     image: tianon/true
     networks:
       unifi:
+        ipv4_address: ${NET_ADDR_INIT_IPV4:-172.18.40.254}
     volumes:
       - unifi-db-data:/mnt/unifi-db-data
       - unifi-app-config:/mnt/unifi-app-config
+
 networks:
   unifi:
     name: unifi
     driver: bridge
     driver_opts:
       com.docker.network.bridge.name: docker-unifi
+    ipam:
+      config:
+        - subnet: ${NET_CIDR_IPV4:-172.18.21.0/24}
+
 volumes:
   unifi-db-data:
     name: unifi-db-data

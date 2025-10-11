@@ -9,10 +9,12 @@ services:
       com.centurylinklabs.watchtower.enable: "true"
     networks:
       unifi:
+        ipv4_address: ${NET_ADDR_SERVER_IPV4:-172.18.21.10}
     ports:
       - 3478:3478/udp
       - 5514:5514/udp
       - 6789:6789
+      # inform
       - 8080:8080
       - 8843:8843
       - 8443:8443
