@@ -5,7 +5,7 @@ services:
     image: tianon/true
     networks:
       unifi:
-        ipv4_address: ${NET_ADDR_INIT_IPV4:-172.18.40.254}
+        ipv4_address: ${NET_ADDR_INIT_IPV4:-172.18.21.254}
     volumes:
       - unifi-db-data:/mnt/unifi-db-data
       - unifi-app-config:/mnt/unifi-app-config
