@@ -6,6 +6,8 @@ services:
     container_name: npm
     restart: unless-stopped
     network_mode: host
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     environment:
       - DISABLE_IPV6=${NPM_DISABLE_IPV6:-false}
       - INITIAL_ADMIN_EMAIL=${NPM_INITED_ADMIN_EMAIL:-admin@example.com}
@@ -18,3 +20,7 @@ services:
       options:
         max-size: "50m"
         max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 768mb
