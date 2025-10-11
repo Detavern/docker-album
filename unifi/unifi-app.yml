@@ -11,16 +11,21 @@ services:
       unifi:
         ipv4_address: ${NET_ADDR_SERVER_IPV4:-172.18.21.10}
     ports:
-      - 3478:3478/udp
-      - 5514:5514/udp
-      - 6789:6789
       # inform
       - 8080:8080
+      # web admin
+      # - 8443:8443
+      # guest portal
+      - 8880:8880
       - 8843:8843
-      - 8443:8443
-      # login page
-      - 8880:8880/tcp
-      - 10001:10001/udp
+      # stun
+      - 3478:3478/udp
+      # remote syslog
+      - 5514:5514/udp
+      # mobile throughput test
+      # - 6789:6789
+      # ap discovery
+      # - 10001:10001/udp
     volumes:
       - unifi-app-config:/config
     environment:
@@ -45,7 +50,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1200mb
+          memory: 1280mb
 
 networks:
   unifi:
