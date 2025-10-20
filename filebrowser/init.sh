@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # mkdir
-mkdir -p /data/filebrowser
-chown 1000:1000 /data/filebrowser
+mkdir -p /data/filebrowser/srv
+chown -R 1000:1000 /data/filebrowser
 
 # init config db
 docker run --rm -v /data/filebrowser:/tmp filebrowser/filebrowser \
