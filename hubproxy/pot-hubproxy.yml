@@ -1,7 +1,7 @@
 name: pot-hubproxy
 services:
   hubproxy:
-    image: ghcr.io/sky22333/hubproxy:latest
+    image: ${HUBPROXY_IMAGE:-ghcr.io/sky22333/hubproxy:latest}
     hostname: hubproxy
     container_name: pot-hubproxy
     labels:
@@ -22,6 +22,11 @@ services:
       options:
         max-size: 50m
         max-file: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512mb
 
 networks:
   potnet:
