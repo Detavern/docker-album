@@ -22,7 +22,9 @@ services:
       - --log.format=json
       - --accesslog=true
       - --accesslog.format=json
-      - --experimental.plugins.cloudflarewarp.modulename=github.com/BetterCorp/cloudflarewarp
+      # traefik-get-real-ip
+      - --experimental.plugins.cloudflarewarp.modulename=github.com/Paxxs/traefik-get-real-ip
+      - --experimental.plugins.cloudflarewarp.version=v1.0.2
     logging:
       driver: json-file
       options:
