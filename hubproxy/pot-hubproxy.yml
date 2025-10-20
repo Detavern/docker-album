@@ -5,15 +5,15 @@ services:
     hostname: hubproxy
     container_name: pot-hubproxy
     labels:
-      com.centurylinklabs.watchtower.enable: "true"
-      traefik.enable: "true"
-      traefik.http.routers.hubproxy.rule: "Host(`hubproxy.pot`)"
-      traefik.http.routers.hubproxy.entrypoints: "web"
-      traefik.http.services.hubproxy.loadbalancer.server.port: "5000"
-      traefik.http.services.hubproxy.loadbalancer.passhostheader: "true"
-      traefik.http.services.hubproxy.loadbalancer.healthcheck.path: "/"
-      traefik.http.services.hubproxy.loadbalancer.headers.customrequestheaders.X-Real-IP: "{http.request.header.CF-Connecting-IP}"
-      traefik.http.services.hubproxy.loadbalancer.headers.customrequestheaders.X-Forwarded-For: "{http.request.header.CF-Connecting-IP}"
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.middlewares.cloudflarewarp.plugin.cloudflarewarp.disableDefault=false
+      - traefik.http.routers.hubproxy.rule=Host(`hubproxy.pot`)
+      - traefik.http.routers.hubproxy.entrypoints=web
+      - traefik.http.routers.hubproxy.middlewares=cloudflarewarp@docker
+      - traefik.http.services.hubproxy.loadbalancer.server.port=5000
+      - traefik.http.services.hubproxy.loadbalancer.passhostheader=true
+      - traefik.http.services.hubproxy.loadbalancer.healthcheck.path=/
     restart: unless-stopped
     networks:
       - potnet
