@@ -1,0 +1,39 @@
+name: pot-filebrowser
+services:
+  filebrowser:
+    image: ${FILE_BROWSER_SERVER_IMAGE:-filebrowser/filebrowser:latest}
+    hostname: filebrowser
+    container_name: pot-filebrowser
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].proxyHeadername="*"
+      - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].realIP=CF-Connecting-IP
+      - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].OverwriteXFF=true
+      - traefik.http.routers.filebrowser.rule=Host(`filebrowser.pot`)
+      - traefik.http.routers.filebrowser.entrypoints=web
+      - traefik.http.routers.filebrowser.middlewares=cloudflare-realip@docker
+      - traefik.http.services.filebrowser.loadbalancer.server.port=80
+      - traefik.http.services.filebrowser.loadbalancer.passhostheader=true
+      - traefik.http.services.filebrowser.loadbalancer.healthcheck.path=/
+    restart: unless-stopped
+    networks:
+      - potnet
+    volumes:
+      - ${FILE_BROWSER_SERVE_DIR:-/data/filebrowser/srv}:/srv
+      - ${FILE_BROWSER_DATA_DB:-/data/filebrowser/filebrowser.db}:/database/filebrowser.db
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512mb
+
+networks:
+  potnet:
+    name: potnet
+    external: true
