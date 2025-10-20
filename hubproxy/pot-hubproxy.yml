@@ -7,10 +7,12 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
-      - traefik.http.middlewares.cloudflarewarp.plugin.cloudflarewarp.disableDefault=false
+      - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].proxyHeadername="*"
+      - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].realIP=CF-Connecting-IP
+      - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].OverwriteXFF=true
       - traefik.http.routers.hubproxy.rule=Host(`hubproxy.pot`)
       - traefik.http.routers.hubproxy.entrypoints=web
-      - traefik.http.routers.hubproxy.middlewares=cloudflarewarp@docker
+      - traefik.http.routers.hubproxy.middlewares=cloudflare-realip@docker
       - traefik.http.services.hubproxy.loadbalancer.server.port=5000
       - traefik.http.services.hubproxy.loadbalancer.passhostheader=true
       - traefik.http.services.hubproxy.loadbalancer.healthcheck.path=/
