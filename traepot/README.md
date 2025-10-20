@@ -11,3 +11,7 @@ Edit `/etc/systemd/resolved.conf`
 DNS=172.18.1.3
 Domains=~pot
 ```
+
+Prepare configuration directory `mkdir /etc/traepot`
+
+Prepare coredns configuration file `cp ./etc/Corefile /etc/traepot/Corefile`
