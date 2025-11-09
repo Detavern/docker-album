@@ -1,33 +1,53 @@
 #!/bin/bash
-# et-masq.sh - setup iptables-legacy masquerade rules
+# etmask.sh - setup iptables-legacy masquerade rules
 # For source subnets 192.168.0.0/16 and 172.12.0.0/16
 # Excluding internal destinations
 
 set -e
 
-CHAIN="ET-MASQ"
+CHAIN_PRE="ET-MASK-PRE"
+CHAIN_POST="ET-MASK-POST"
 
-# flush or create
-if iptables-legacy -t nat -nL $CHAIN >/dev/null 2>&1; then
-    echo "[INFO] Chain $CHAIN exists, flushing..."
-    iptables-legacy -t nat -F $CHAIN
+GATEAWAY_V4=$(ip route show default | awk '/default/ {print $3}')
+echo "[INFO] IPv4 gateway is $GATEAWAY_V4"
+
+# NAT POSTROUTING
+
+# flush
+if iptables-legacy -t nat -nL $CHAIN_POST >/dev/null 2>&1; then
+    echo "[INFO] Chain $CHAIN_POST exists, flushing..."
+    iptables-legacy -t nat -F $CHAIN_POST
 else
-    echo "[INFO] Creating chain $CHAIN..."
-    iptables-legacy -t nat -N $CHAIN
+    echo "[INFO] Creating chain $CHAIN_POST..."
+    iptables-legacy -t nat -N $CHAIN_POST
 fi
 
-# 添加入口跳转规则（避免重复先删除）
-iptables-legacy -t nat -D POSTROUTING -s 192.168.0.0/16 -j $CHAIN 2>/dev/null || true
-iptables-legacy -t nat -D POSTROUTING -s 172.16.0.0/12 -j $CHAIN 2>/dev/null || true
-iptables-legacy -t nat -A POSTROUTING -s 192.168.0.0/16 -j $CHAIN
-iptables-legacy -t nat -A POSTROUTING -s 172.16.0.0/12 -j $CHAIN
+# Jump from postrouting to custom chain
+iptables-legacy -t nat -D POSTROUTING -s 192.168.0.0/16 -j $CHAIN_POST 2>/dev/null || true
+iptables-legacy -t nat -D POSTROUTING -s 172.16.0.0/12 -j $CHAIN_POST 2>/dev/null || true
+iptables-legacy -t nat -A POSTROUTING -s 192.168.0.0/16 -j $CHAIN_POST
+iptables-legacy -t nat -A POSTROUTING -s 172.16.0.0/12 -j $CHAIN_POST
 
-# 内部网段直接 RETURN
-iptables-legacy -t nat -A $CHAIN -d 10.0.0.0/8       -j RETURN
-iptables-legacy -t nat -A $CHAIN -d 172.16.0.0/12    -j RETURN
-iptables-legacy -t nat -A $CHAIN -d 192.168.0.0/16   -j RETURN
+# Return destinations which are internal addresses
+iptables-legacy -t nat -A $CHAIN_POST -d 10.0.0.0/8 -j RETURN
+iptables-legacy -t nat -A $CHAIN_POST -d 172.16.0.0/12 -j RETURN
+iptables-legacy -t nat -A $CHAIN_POST -d 192.168.0.0/16 -j RETURN
 
-# 其他目的地址走 MASQUERADE
-iptables-legacy -t nat -A $CHAIN -j MASQUERADE
+# Masquerade for other destinations
+iptables-legacy -t nat -A $CHAIN_POST -j MASQUERADE
 
-echo "[OK] ET-MASQ chain installed"
+echo "[OK] ET-MASK-POST chain installed"
+
+# NAT PREROUTING
+
+# Jump from prerouting to custom chain
+# flush
+iptables-legacy -t nat -F PREROUTING
+echo "[INFO] Chain prerouting, flushing..."
+
+iptables-legacy -t nat -A PREROUTING -p tcp -m addrtype --dst-type LOCAL \
+    --dport 233 -j DNAT --to-destination $GATEAWAY_V4:233
+iptables-legacy -t nat -A PREROUTING -p tcp -m addrtype --dst-type LOCAL \
+    --dport 2333 -j DNAT --to-destination $GATEAWAY_V4:2333
+
+echo "[OK] ET-MASK-PRE chain installed"

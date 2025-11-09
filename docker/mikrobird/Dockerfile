@@ -16,6 +16,7 @@ COPY entrypoint.sh /usr/local/bin/
 COPY bin/ /usr/local/bin/
 COPY templates /root/templates/
 
+ENV WAN_INTERFACE=
 ENV BIRD_CONF_TMPL=sdn
 ENV BIRD_STATIC_IPV4_ENABLED=1 BIRD_STATIC_IPV6_ENABLED=1
 ENV BIRD_OSPF_V2_ENABLED=1 BIRD_OSPF_V3_ENABLED=1

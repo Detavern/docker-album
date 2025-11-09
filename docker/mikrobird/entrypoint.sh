@@ -51,6 +51,11 @@ if [ ! -f "${FIRST_RUN}" ]; then
         # router id
         sed -i "s/^\(router id\) .*\?;/\1 ${BIRD_ROUTER_ID};/" ${BIRD_CONF_FILE}
 
+        # wan interface
+        if [ -n "${WAN_INTERFACE}" ]; then
+            sed -i "s/interface \"eth0\"/interface \"$WAN_INTERFACE\"/" ${BIRD_CONF_FILE}
+        fi
+
         # static ipv4
         if [ "${BIRD_STATIC_IPV4_ENABLED}" = "0" ]; then
             comment_block_after_header "### static ipv4" ${BIRD_CONF_FILE}
