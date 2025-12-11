@@ -1,7 +1,7 @@
 name: watchtower
 services:
   watchtower:
-    image: ${WATCHTOWER_IMAGE:-containrrr/watchtower:latest}
+    image: ${WATCHTOWER_IMAGE:-nickfedor/watchtower:latest}
     hostname: watchtower
     container_name: watchtower
     restart: unless-stopped
