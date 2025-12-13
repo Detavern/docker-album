@@ -15,7 +15,14 @@ services:
       MYSQL_USER: ${MYSQL_USER:-}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-}
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
     deploy:
       resources:
         limits:
-          memory: 1024mb
+          cpus: "1.0"
+          memory: 512mb
