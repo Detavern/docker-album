@@ -1,16 +1,15 @@
-name: postgres
+name: yahs-postgres
 services:
-  postgres:
+  yahs-postgres:
     image: postgres:18
-    hostname: postgres
-    container_name: postgres
+    hostname: yahs-postgres
+    container_name: yahs-postgres
     restart: unless-stopped
+    network_mode: host
     # set shared memory limit, half of the total memory limit is a good practice
-    shm_size: 256mb
-    ports:
-      - ${POSTGRES_PORT:-5432}:5432
+    shm_size: 512mb
     volumes:
-      - ${POSTGRES_DATA_DIR:-/data/postgres}:/var/lib/postgresql/data
+      - ${POSTGRES_DATA_DIR:-/data/yahs/postgres}:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
@@ -23,5 +22,4 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1.0"
-          memory: 512mb
+          memory: 1024mb
