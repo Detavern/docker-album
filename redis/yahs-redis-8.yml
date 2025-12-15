@@ -1,0 +1,29 @@
+name: yahs-redis
+services:
+  yahs-redis:
+    image: redis:8
+    hostname: yahs-redis
+    container_name: yahs-redis
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - yahs-redis-data:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 1024mb
+
+volumes:
+  yahs-redis-data:
+    name: yahs-redis-data
