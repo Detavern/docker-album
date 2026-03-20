@@ -4,8 +4,8 @@ services:
     image: traefik:latest
     hostname: traefik
     container_name: traepot-traefik
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
+    # labels:
+    #   com.centurylinklabs.watchtower.enable: "true"
     restart: unless-stopped
     networks:
       potnet:
@@ -24,7 +24,7 @@ services:
       - --accesslog.format=json
       # plugin: traefik-get-real-ip
       - --experimental.plugins.realip.modulename=github.com/Paxxs/traefik-get-real-ip
-      - --experimental.plugins.realip.version=v1.0.2
+      - --experimental.plugins.realip.version=v1.0.4
     logging:
       driver: json-file
       options:
