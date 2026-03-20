@@ -8,7 +8,7 @@ Edit `/etc/systemd/resolved.conf`
 
 ```toml
 [Resolve]
-DNS=172.18.1.3
+DNS=172.18.1.253
 Domains=~pot
 ```
 

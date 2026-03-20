@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     networks:
       potnet:
-        ipv4_address: ${NET_ADDR_TRAEFIK_IPV4:-172.18.1.252}
+        ipv4_address: ${NET_ADDR_TRAEFIK_IPV4:-172.18.1.251}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # - ${TRAEPOT_TRAEFIK_CONFIG_DIR:-/etc/traepot/traefik}:/etc/traefik

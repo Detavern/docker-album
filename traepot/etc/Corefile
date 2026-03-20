@@ -1,7 +1,7 @@
 .:53 {
     template IN A {
         match ^(.+)[.]pot[.]$
-        answer "{{.Name}} 60 IN A 172.18.1.2"
+        answer "{{.Name}} 60 IN A 172.18.1.251"
     }
     template IN AAAA {
         match ^(.+)[.]pot[.]$
