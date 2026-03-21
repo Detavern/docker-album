@@ -1,0 +1,20 @@
+name: iperf3
+services:
+  iperf3:
+    image: ${IPERF3_IMAGE:-mlabbe/iperf3:latest}
+    hostname: iperf3
+    container_name: iperf3
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+    restart: unless-stopped
+    network_mode: host
+    command: -s -p ${IPERF3_PORT:-15201}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: ${IPERF3_MEM_LIMIT:-128}mb
