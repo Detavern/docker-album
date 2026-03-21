@@ -8,7 +8,10 @@ services:
       - com.centurylinklabs.watchtower.enable=true
     restart: unless-stopped
     network_mode: host
-    command: -s -p ${IPERF3_PORT:-15201}
+    command: >-
+      -s
+      -p ${IPERF3_PORT:-15201}
+      --idle-timeout 10
 
     healthcheck:
       test: ["CMD", "iperf3", "-k", "1", "-c", "127.0.0.1", "-p", "${IPERF3_PORT:-15201}"]
