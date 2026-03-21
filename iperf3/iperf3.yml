@@ -9,6 +9,12 @@ services:
     restart: unless-stopped
     network_mode: host
     command: -s -p ${IPERF3_PORT:-15201}
+
+    healthcheck:
+      test: ["CMD", "iperf3", "-k", "1", "-c", "127.0.0.1", "-p", "${IPERF3_PORT:-15201}"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     logging:
       driver: "json-file"
       options:
