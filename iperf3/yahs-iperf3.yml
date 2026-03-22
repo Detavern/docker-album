@@ -1,15 +1,22 @@
-name: iperf3
+name: yahs-iperf3
 services:
-  iperf3:
+  yahs-iperf3:
     image: ${IPERF3_IMAGE:-mlabbe/iperf3:latest}
-    hostname: iperf3
-    container_name: iperf3
+    hostname: yahs-iperf3
+    container_name: yahs-iperf3
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
     restart: unless-stopped
     network_mode: host
+    volumes:
+      - ${IPERF3_CONFIG_DIR:-/etc/iperf3}:/etc/iperf3:ro
     command: >-
       -s
       -p ${IPERF3_PORT:-15201}
       --idle-timeout 10
+      --use-pkcs1-padding
+      --authorized-users-path ${IPERF3_CONFIG_DIR:-/etc/iperf3}/users.csv
+      --rsa-private-key-path ${IPERF3_CONFIG_DIR:-/etc/iperf3}/private_key.pem
 
     healthcheck:
       test: ["CMD", "iperf3", "-k", "1", "-c", "127.0.0.1", "-p", "${IPERF3_PORT:-15201}"]
