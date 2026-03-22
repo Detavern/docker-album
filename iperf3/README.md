@@ -10,11 +10,13 @@ For backwards-compatibility use the --use-pkcs1-padding flag.
 
 ### Setup
 
-Generate RSA Key pair `/etc/systemd/resolved.conf`
+Prepare configuration directory at `/etc/iperf3`
+
+Generate RSA Key pair
 
 ```bash
-openssl genpkey -algorithm RSA -out etc/iperf3/private_key.pem -pkeyopt rsa_keygen_bits:2048
-openssl rsa -pubout -in etc/iperf3/private_key.pem -out etc/iperf3/public_key.pem
+openssl genpkey -algorithm RSA -out /etc/iperf3/private_key.pem -pkeyopt rsa_keygen_bits:2048
+openssl rsa -pubout -in /etc/iperf3/private_key.pem -out /etc/iperf3/public_key.pem
 ```
 
 Prepare user/password pair at `/etc/iperf3/users.csv`
