@@ -19,7 +19,7 @@ services:
       --rsa-private-key-path ${IPERF3_CONFIG_DIR:-/etc/iperf3}/private_key.pem
 
     healthcheck:
-      test: ["CMD", "iperf3", "-k", "1", "-c", "127.0.0.1", "-p", "${IPERF3_PORT:-15201}"]
+      test: ["CMD", "nc", "-z", "127.0.0.1", "${IPERF3_PORT:-15201}"]
       interval: 10s
       timeout: 5s
       retries: 3
