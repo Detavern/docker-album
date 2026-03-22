@@ -1,2 +1,2 @@
-# Format: user,passwd
-# echo -n "password" | sha256sum
+# Format: user,hashed_passwd
+# hashed_passwd: echo -n "{user}password" | sha256sum

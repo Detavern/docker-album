@@ -17,6 +17,8 @@ Generate RSA Key pair
 ```bash
 openssl genpkey -algorithm RSA -out /etc/iperf3/private_key.pem -pkeyopt rsa_keygen_bits:2048
 openssl rsa -pubout -in /etc/iperf3/private_key.pem -out /etc/iperf3/public_key.pem
+
+chmod 644 /etc/iperf3/private_key.pem
 ```
 
 Prepare user/password pair at `/etc/iperf3/users.csv`
