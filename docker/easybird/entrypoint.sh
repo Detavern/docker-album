@@ -26,9 +26,18 @@ comment_block_after_header() {
 
 if [ ! -f "${FIRST_RUN}" ]; then
     # check env
-    if [ -z "${EASYTIER_CONFIG_SERVER}" ]; then
-        echo "EASYTIER_CONFIG_SERVER not set, check it manually" 2>&1
+    if [ -z "${EASYTIER_CONFIG_SERVER}" && -z "${EASYTIER_CONFIG_FILE}" ]; then
+        echo "EASYTIER_CONFIG_SERVER or EASYTIER_CONFIG_FILE not set, check it manually" 2>&1
         exit 1
+    fi
+
+    # make options
+    if [ -n "${EASYTIER_CONFIG_SERVER}" ]; then
+        export EASYTIER_OPTIONS="-w ${EASYTIER_CONFIG_SERVER}"
+    fi
+
+    if [ -n "${EASYTIER_CONFIG_FILE}" ]; then
+        export EASYTIER_OPTIONS="-c ${EASYTIER_CONFIG_FILE}"
     fi
 
     # init machine-id
