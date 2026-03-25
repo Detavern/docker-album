@@ -68,7 +68,7 @@ jobs:
         id: docker_tags
         run: |
           BASE_VERSION="${{ steps.version.outputs.base_version }}"
-          INPUT_TAG="${{ inputs.tag || github.ref_name }}
+          INPUT_TAG="${{ inputs.tag || github.ref_name }}"
 
           if [[ "${GITHUB_REF_NAME}" == "master" || "${GITHUB_REF_NAME}" == "main" ]]; then
             TAGS="type=raw,value=latest\ntype=raw,value=${INPUT_TAG}\ntype=raw,value=${BASE_VERSION}"
