@@ -16,7 +16,7 @@ on:
       tag:
         description: "The tag version you want to build"
         required: false
-        default: "latest"
+        default: ""
         type: string
 
 env:
@@ -68,12 +68,14 @@ jobs:
         id: docker_tags
         run: |
           BASE_VERSION="${{ steps.version.outputs.base_version }}"
-          INPUT_TAG="${{ inputs.tag }}"
+          INPUT_TAG="${{ inputs.tag || github.ref_name }}
 
-          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" && "${INPUT_TAG}" != "latest" ]]; then
-            TAGS="type=raw,value=${INPUT_TAG}"
-          else
+          if [[ "${GITHUB_REF_NAME}" == "master" || "${GITHUB_REF_NAME}" == "main" ]]; then
+            TAGS="type=raw,value=latest\ntype=raw,value=${INPUT_TAG}\ntype=raw,value=${BASE_VERSION}"
+          elif [[ "${INPUT_TAG}" == "latest" ]]; then
             TAGS="type=raw,value=latest\ntype=raw,value=${BASE_VERSION}"
+          else
+            TAGS="type=raw,value=${INPUT_TAG}"
           fi
 
           echo 'computed_tags<<EOF' >> $GITHUB_OUTPUT
