@@ -19,6 +19,8 @@ services:
     restart: unless-stopped
     networks:
       - potnet
+    environment:
+      - RATE_LIMIT=${HUBPROXY_RATE_LIMIT:-1000}
 
     logging:
       driver: json-file
