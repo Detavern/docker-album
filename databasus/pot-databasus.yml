@@ -3,7 +3,7 @@ services:
   databasus:
     image: databasus/databasus:latest
     hostname: databasus
-    container_name: databasus
+    container_name: pot-databasus
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
