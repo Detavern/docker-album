@@ -22,4 +22,4 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1024mb
+          memory: ${POSTGRES_MEM_LIMIT:-1024}mb

@@ -23,4 +23,4 @@ services:
     deploy:
       resources:
         limits:
-          memory: 768mb
+          memory: ${NPM_MEM_LIMIT:-768}mb

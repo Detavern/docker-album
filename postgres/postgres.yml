@@ -24,4 +24,4 @@ services:
       resources:
         limits:
           cpus: "1.0"
-          memory: 512mb
+          memory: ${POSTGRES_MEM_LIMIT:-512}mb
