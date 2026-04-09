@@ -19,6 +19,7 @@ services:
     restart: unless-stopped
     networks:
       - potnet
+
     logging:
       driver: json-file
       options:

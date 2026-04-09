@@ -16,12 +16,12 @@ services:
       - traefik.http.services.databasus.loadbalancer.server.port=4005
       - traefik.http.services.databasus.loadbalancer.passhostheader=true
       - traefik.http.services.databasus.loadbalancer.healthcheck.path=/
-
-    volumes:
-      - ${DATABASUS_DATA_DIR:-/data/databasus}:/databasus-data
     restart: unless-stopped
     networks:
       - potnet
+    volumes:
+      - ${DATABASUS_DATA_DIR:-/data/databasus}:/databasus-data
+
     logging:
       driver: json-file
       options:
