@@ -1,0 +1,39 @@
+name: pot-databasus
+services:
+  databasus:
+    image: databasus/databasus:latest
+    hostname: databasus
+    container_name: databasus
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].proxyHeadername="*"
+      - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].realIP=CF-Connecting-IP
+      - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].OverwriteXFF=true
+      - traefik.http.routers.databasus.rule=Host(`databasus.pot`)
+      - traefik.http.routers.databasus.entrypoints=web
+      - traefik.http.routers.databasus.middlewares=cloudflare-realip@docker
+      - traefik.http.services.databasus.loadbalancer.server.port=4005
+      - traefik.http.services.databasus.loadbalancer.passhostheader=true
+      - traefik.http.services.databasus.loadbalancer.healthcheck.path=/
+
+    volumes:
+      - ${DATABASUS_DATA_DIR:-/data/databasus}:/databasus-data
+    restart: unless-stopped
+    networks:
+      - potnet
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: ${DATABASUS_MEM_LIMIT:-1024}mb
+
+networks:
+  potnet:
+    name: potnet
+    external: true
