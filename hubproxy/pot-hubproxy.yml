@@ -31,7 +31,7 @@ services:
       resources:
         limits:
           cpus: "1.0"
-          memory: 512mb
+          memory: ${HUBPROXY_MEM_LIMIT:-512}mb
 
 networks:
   potnet:
