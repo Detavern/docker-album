@@ -1,9 +1,24 @@
+name: databasus
 services:
   databasus:
-    container_name: databasus
     image: databasus/databasus:latest
-    ports:
-      - "4005:4005"
-    volumes:
-      - ./databasus-data:/databasus-data
+    hostname: databasus
+    container_name: databasus
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
     restart: unless-stopped
+    ports:
+      - 4005:4005
+    volumes:
+      - ${DATABASUS_DATA_DIR:-/data/databasus}:/databasus-data
+
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: ${DATABASUS_MEM_LIMIT:-1024}mb
