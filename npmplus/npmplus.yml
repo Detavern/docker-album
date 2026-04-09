@@ -1,0 +1,35 @@
+name: npmplus
+services:
+  npmplus:
+    image: docker.io/zoeyvid/npmplus:latest
+    hostname: npmplus
+    container_name: npmplus
+    restart: unless-stopped
+    network_mode: host
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - SETGID
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      # "TZ identifier" column of https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
+      - TZ=${NPMPLUS_TZ:-Asia/Hong_Kong}
+      - NGINX_FORCE_X25519MLKEM768=true
+      - INITIAL_ADMIN_EMAIL=${NPMPLUS_INITED_ADMIN_EMAIL:-admin@example.com}
+      - INITIAL_ADMIN_PASSWORD=${NPMPLUS_INITED_ADMIN_PASSWORD:-dieBaipah7leehoh}
+    volumes:
+      - ${NPMPLUS_DATA_DIR:-/data/npmplus}:/data
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: ${NPMPLUS_MEM_LIMIT:-768}mb
