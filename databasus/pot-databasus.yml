@@ -10,7 +10,7 @@ services:
       - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].proxyHeadername="*"
       - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].realIP=CF-Connecting-IP
       - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].OverwriteXFF=true
-      - traefik.http.routers.databasus.rule=Host(`databasus.pot`)
+      - traefik.http.routers.databasus.rule=Host(${DATABASUS_HOST:-`databasus.pot`})
       - traefik.http.routers.databasus.entrypoints=web
       - traefik.http.routers.databasus.middlewares=cloudflare-realip@docker
       - traefik.http.services.databasus.loadbalancer.server.port=4005
