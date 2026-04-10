@@ -17,6 +17,19 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
 
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - -h
+        - localhost
+        - -uroot
+        - -p${MYSQL_ROOT_PASSWORD:?}
+      start_period: 20s
+      interval: 10s
+      timeout: 5s
+      retries: 3
     logging:
       driver: json-file
       options:
