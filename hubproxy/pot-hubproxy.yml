@@ -25,9 +25,9 @@ services:
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://127.0.0.1:${HUBPROXY_LISTEN_PORT:-5000}/api/v1/system/health
+        - wget
+        - -qO-
+        - http://127.0.0.1:${HUBPROXY_LISTEN_PORT:-5000}/ready
       start_period: 20s
       interval: 10s
       timeout: 5s
