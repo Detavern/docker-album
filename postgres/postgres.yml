@@ -22,7 +22,7 @@ services:
         - -h
         - localhost
         - -p
-        - 5432
+        - "5432"
       start_period: 20s
       interval: 10s
       timeout: 5s
