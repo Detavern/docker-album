@@ -20,14 +20,15 @@ services:
 
     healthcheck:
       test: ["CMD", "nc", "-z", "127.0.0.1", "${IPERF3_PORT:-15201}"]
+      start_period: 20s
       interval: 10s
       timeout: 5s
       retries: 3
     logging:
-      driver: "json-file"
+      driver: json-file
       options:
-        max-size: "10m"
-        max-file: "3"
+        max-size: 10m
+        max-file: 3
     deploy:
       resources:
         limits:

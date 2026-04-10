@@ -23,6 +23,12 @@ services:
     volumes:
       - ${DATABASUS_DATA_DIR:-/data/databasus}:/databasus-data
 
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:4005/api/v1/system/health"]
+      start_period: 20s
+      interval: 10s
+      timeout: 5s
+      retries: 3
     logging:
       driver: json-file
       options:

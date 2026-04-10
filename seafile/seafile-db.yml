@@ -13,6 +13,7 @@ services:
       - MARIADB_AUTO_UPGRADE=1
     volumes:
       - "${SEAFILE_MYSQL_DATA_DIR:-/opt/seafile/mysql}:/var/lib/mysql"
+
     healthcheck:
       test:
         - CMD
@@ -21,14 +22,19 @@ services:
         - --mariadbupgrade
         - --innodb_initialized
       interval: 20s
-      start_period: 30s
+      start_period: 10s
       timeout: 5s
-      retries: 10
+      retries: 3
     logging:
       driver: json-file
       options:
         max-size: 50m
         max-file: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: ${SEAFILE_MYSQL_MEM_LIMIT:-1024}mb
 
   seafile-memcached:
     image: ${SEAFILE_MEMCACHED_IMAGE:-memcached:1.6}
