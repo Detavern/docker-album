@@ -1,8 +1,0 @@
-name: metacubexd
-services:
-  metacubexd:
-    image: ghcr.io/metacubex/metacubexd
-    hostname: singbox
-    container_name: metacubexd
-    restart: unless-stopped
-    network_mode: host
