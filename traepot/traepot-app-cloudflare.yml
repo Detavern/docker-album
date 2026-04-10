@@ -18,18 +18,33 @@ services:
       - --api.insecure=true
       - --providers.docker=true
       - --entrypoints.web.address=:80
+      - --entrypoints.traefik.address=:8080
       - --log.level=INFO
       - --log.format=json
       - --accesslog=true
       - --accesslog.format=json
+      # health check
+      - --ping=true
+      - --ping.entrypoint=traefik
       # plugin: traefik-get-real-ip
       - --experimental.plugins.realip.modulename=github.com/Paxxs/traefik-get-real-ip
       - --experimental.plugins.realip.version=v1.0.4
+
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
+      start_period: 20s
+      interval: 10s
+      timeout: 5s
+      retries: 3
     logging:
       driver: json-file
       options:
         max-size: 50m
         max-file: 3
+    deploy:
+      resources:
+        limits:
+          memory: ${TRAEPOT_TRAEFIK_MEM_LIMIT:-512}mb
 
   coredns:
     image: coredns/coredns:latest
@@ -43,11 +58,16 @@ services:
         ipv4_address: ${NET_ADDR_COREDNS_IPV4:-172.18.1.253}
     volumes:
       - ${TRAEPOT_COREDNS_CONFIG_FILE:-/etc/traepot/Corefile}:/Corefile
+
     logging:
       driver: json-file
       options:
         max-size: 50m
         max-file: 3
+    deploy:
+      resources:
+        limits:
+          memory: 128mb
 
 networks:
   potnet:
