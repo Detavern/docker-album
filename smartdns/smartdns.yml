@@ -11,7 +11,7 @@ services:
     volumes:
       - ${SMARTDNS_CONFIG_DIR:-/etc/smartdns}:/etc/smartdns
     logging:
-      driver: "json-file"
+      driver: json-file
       options:
-        max-size: "50m"
-        max-file: "3"
+        max-size: 50m
+        max-file: 3

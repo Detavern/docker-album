@@ -25,10 +25,10 @@ services:
       - ${NPMPLUS_DATA_DIR:-/data/npmplus}:/data
 
     logging:
-      driver: "json-file"
+      driver: json-file
       options:
-        max-size: "50m"
-        max-file: "3"
+        max-size: 50m
+        max-file: 3
     deploy:
       resources:
         limits:

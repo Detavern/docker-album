@@ -13,11 +13,12 @@ services:
       - ${CADDY_SRV_DIR:-/srv/caddy}:/srv
       - caddy-plus-data:/data
       - caddy-plus-config:/config
+
     logging:
-      driver: "json-file"
+      driver: json-file
       options:
-        max-size: "50m"
-        max-file: "3"
+        max-size: 50m
+        max-file: 3
     deploy:
       resources:
         limits:

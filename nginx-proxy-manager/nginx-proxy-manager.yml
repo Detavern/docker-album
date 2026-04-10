@@ -17,10 +17,10 @@ services:
       - ${NPM_LETSENCRYPT_DATA_DIR:-/data/letsencrypt}:/etc/letsencrypt
 
     logging:
-      driver: "json-file"
+      driver: json-file
       options:
-        max-size: "50m"
-        max-file: "3"
+        max-size: 50m
+        max-file: 3
     deploy:
       resources:
         limits:

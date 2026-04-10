@@ -17,10 +17,10 @@ services:
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
     logging:
-      driver: "json-file"
+      driver: json-file
       options:
-        max-size: "50m"
-        max-file: "3"
+        max-size: 50m
+        max-file: 3
     deploy:
       resources:
         limits:

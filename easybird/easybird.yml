@@ -26,10 +26,10 @@ services:
       - /etc/machine-id:/etc/machine-id:ro
       - /etc/bird:/etc/bird
     logging:
-      driver: "json-file"
+      driver: json-file
       options:
-        max-size: "50m"
-        max-file: "3"
+        max-size: 50m
+        max-file: 3
     deploy:
       resources:
         limits:

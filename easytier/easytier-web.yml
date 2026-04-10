@@ -22,10 +22,10 @@ services:
       -p ${EASYTIER_CONFIG_SERVER_PROTOCOL:-udp}
       --console-log-level warn
     logging:
-      driver: "json-file"
+      driver: json-file
       options:
-        max-size: "50m"
-        max-file: "3"
+        max-size: 50m
+        max-file: 3
     deploy:
       resources:
         limits:

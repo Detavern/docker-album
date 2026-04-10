@@ -14,7 +14,7 @@ services:
     volumes:
       - ${DDNS_CONFIG_FILE:-/etc/cloudflare-ddns/config.json}:/config.json
     logging:
-      driver: "json-file"
+      driver: json-file
       options:
-        max-size: "50m"
-        max-file: "3"
+        max-size: 50m
+        max-file: 3
