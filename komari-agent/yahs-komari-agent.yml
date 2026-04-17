@@ -14,13 +14,18 @@ services:
       --disable-web-ssh
       --disable-auto-update
       --month-rotate ${KOMARI_AGENT_MONTH_ROTATE:-1}
+
+    user: "1010:1010"
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_RAW
+    security_opt:
+      - no-new-privileges:true
+    cpus: 2.0
+    mem_limit: ${KOMARI_AGENT_MEM_LIMIT:-256}mb
     logging:
       driver: json-file
       options:
         max-size: 10m
         max-file: 3
-    deploy:
-      resources:
-        limits:
-          cpus: "1.0"
-          memory: ${KOMARI_AGENT_MEM_LIMIT:-256}mb
