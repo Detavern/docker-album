@@ -13,8 +13,8 @@ services:
       - HOST_PROC=/host/proc
       - AGENT_CUSTOM_IPV4=${KOMARI_AGENT_CUSTOM_IPV4:-}
       - AGENT_CUSTOM_IPV6=${KOMARI_AGENT_CUSTOM_IPV6:-}
-      - AGENT_MONTH_ROTATE=${KOMARI_AGENT_MONTH_ROTATE:-1}
       - AGENT_INCLUDE_NICS=${KOMARI_AGENT_INCLUDE_NICS:?}
+      - AGENT_MONTH_ROTATE=${KOMARI_AGENT_MONTH_ROTATE:-1}
     volumes:
       - /proc:/host/proc:ro
       - /etc/os-release:/etc/os-release:ro
