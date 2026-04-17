@@ -1,9 +1,9 @@
-name: komari
+name: komari-monitor
 services:
-  komari:
+  komari-monitor:
     image: ${KOMARI_IMAGE:-ghcr.io/komari-monitor/komari:latest}
-    hostname: komari
-    container_name: komari
+    hostname: komari-monitor
+    container_name: komari-monitor
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
