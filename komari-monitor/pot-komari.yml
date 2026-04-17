@@ -27,16 +27,13 @@ services:
     volumes:
       - ${KOMARI_DATA_DIR:-/data/komari}:/app/data
 
+    cpus: 2.0
+    mem_limit: ${KOMARI_MEM_LIMIT:-2048}mb
     logging:
       driver: json-file
       options:
         max-size: 50m
         max-file: 3
-    deploy:
-      resources:
-        limits:
-          cpus: "2.0"
-          memory: ${KOMARI_MEM_LIMIT:-2048}mb
 
 networks:
   potnet:
