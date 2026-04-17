@@ -12,6 +12,7 @@ services:
     volumes:
       - /etc/os-release:/etc/os-release:ro
       - ${KOMARI_AGENT_DATA_DIR:-/data/komari-agent}:/app/data
+      - ${KOMARI_AGENT_DATA_DIR:-/data/komari-agent}/auto-discovery.json:/app/auto-discovery.json
     command: >-
       -e ${KOMARI_AGENT_ENDPOINT:?}
       --auto-discovery ${KOMARI_AGENT_AD_KEY:?}
