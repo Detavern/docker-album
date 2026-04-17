@@ -9,7 +9,14 @@ services:
     restart: unless-stopped
     network_mode: host
     working_dir: /app/data
+    environment:
+      - HOST_PROC=/host/proc
+      - AGENT_CUSTOM_IPV4=${KOMARI_AGENT_CUSTOM_IPV4:-}
+      - AGENT_CUSTOM_IPV6=${KOMARI_AGENT_CUSTOM_IPV6:-}
+      - AGENT_MONTH_ROTATE=${KOMARI_AGENT_MONTH_ROTATE:-1}
+      - AGENT_INCLUDE_NICS=${KOMARI_AGENT_INCLUDE_NICS:?}
     volumes:
+      - /proc:/host/proc:ro
       - /etc/os-release:/etc/os-release:ro
       - ${KOMARI_AGENT_DATA_DIR:-/data/komari-agent}:/app/data
       - ${KOMARI_AGENT_DATA_DIR:-/data/komari-agent}/auto-discovery.json:/app/auto-discovery.json
@@ -18,8 +25,6 @@ services:
       --auto-discovery ${KOMARI_AGENT_AD_KEY:?}
       --disable-web-ssh
       --disable-auto-update
-      --include-nics ${KOMARI_AGENT_WAN_NICS:?}
-      --month-rotate ${KOMARI_AGENT_MONTH_ROTATE:-1}
 
     cap_drop:
       - ALL
