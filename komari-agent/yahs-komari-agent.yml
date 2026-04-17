@@ -1,0 +1,26 @@
+name: komari-agent
+services:
+  komari-agent:
+    image: ${KOMARI_AGENT_IMAGE:-ghcr.io/komari-monitor/komari-agent:latest}
+    hostname: komari-agent
+    container_name: komari-agent
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+    restart: unless-stopped
+    network_mode: host
+    command: >-
+      -e ${KOMARI_AGENT_ENDPOINT:?}
+      -t ${KOMARI_AGENT_TOKEN:?}
+      --disable-web-ssh
+      --disable-auto-update
+      --month-rotate ${KOMARI_AGENT_MONTH_ROTATE:-1}
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: ${KOMARI_AGENT_MEM_LIMIT:-256}mb
