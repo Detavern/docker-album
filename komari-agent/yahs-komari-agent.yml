@@ -34,4 +34,4 @@ services:
       resources:
         limits:
           cpus: "0.5"
-          memory: ${KOMARI_AGENT_MEM_LIMIT:-256}mb
+          memory: ${KOMARI_AGENT_MEM_LIMIT:-128}mb
