@@ -35,8 +35,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1.0"
-          memory: ${KOMARI_MEM_LIMIT:-512}mb
+          cpus: "2.0"
+          memory: ${KOMARI_MEM_LIMIT:-2048}mb
 
 networks:
   potnet:
