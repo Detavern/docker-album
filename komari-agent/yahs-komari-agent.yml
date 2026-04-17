@@ -19,6 +19,7 @@ services:
       --disable-auto-update
       --include-nics ${KOMARI_AGENT_WAN_NICS:?}
       --month-rotate ${KOMARI_AGENT_MONTH_ROTATE:-1}
+
     cap_drop:
       - ALL
     cap_add:
