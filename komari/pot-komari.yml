@@ -1,0 +1,44 @@
+name: komari
+services:
+  komari:
+    image: ${KOMARI_IMAGE:-ghcr.io/komari-monitor/komari:latest}
+    hostname: komari
+    container_name: komari
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].proxyHeadername="*"
+      - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].realIP=CF-Connecting-IP
+      - traefik.http.middlewares.cloudflare-realip.plugin.realip.Proxy[0].OverwriteXFF=true
+      - traefik.http.routers.komari.rule=${KOMARI_HOST:-Host(`komari.pot`)}
+      - traefik.http.routers.komari.entrypoints=web
+      - traefik.http.routers.komari.middlewares=cloudflare-realip@docker
+      - traefik.http.services.komari.loadbalancer.server.port=${KOMARI_LISTEN_PORT:-25774}
+      - traefik.http.services.komari.loadbalancer.passhostheader=true
+      - traefik.http.services.komari.loadbalancer.healthcheck.path=/
+    restart: unless-stopped
+    networks:
+      - potnet
+    environment:
+      - TZ=Asia/Hong_Kong
+      - KOMARI_LISTEN=[::]:${KOMARI_LISTEN_PORT:-25774}
+      - ADMIN_USERNAME=${KOMARI_ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${KOMARI_ADMIN_PASSWORD:-bokaetoh1phe3Uchah}
+    volumes:
+      - ${KOMARI_DATA_DIR:-/data/komari}:/app/data
+
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: ${KOMARI_MEM_LIMIT:-512}mb
+
+networks:
+  potnet:
+    name: potnet
+    external: true
