@@ -14,13 +14,14 @@ services:
       - 0.0.0.0:22020:22020
       - 0.0.0.0:22020:22020/udp
     volumes:
-      - easytier-web-data:/data
+      - ${EASYTIER_DATA_DIR:-/data/easytier}:/data
     entrypoint: tini -- easytier-web
     command: >-
       -d /data/et.db
       -c ${EASYTIER_CONFIG_SERVER_PORT:-22020}
       -p ${EASYTIER_CONFIG_SERVER_PROTOCOL:-udp}
       --console-log-level warn
+
     logging:
       driver: json-file
       options:
@@ -35,7 +36,3 @@ networks:
   easytier:
     name: easytier
     external: true
-
-volumes:
-  easytier-web-data:
-    name: easytier-web-data
