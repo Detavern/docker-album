@@ -14,13 +14,14 @@ services:
     environment:
       - TZ=Asia/Shanghai
       - EASYTIER_CONFIG_SERVER=${EASYTIER_CONFIG_SERVER:?}
+      - EASYTIER_EXTRA_OPTIONS=${EASYTIER_EXTRA_OPTIONS:-}
       - BIRD_ROUTER_ID=${BIRD_ROUTER_ID:?}
       - BIRD_STATIC_IPV6_ENABLED=0
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
-      - /etc/machine-id:/etc/machine-id:ro
-      - /etc/bird:/etc/bird
+      - ${BIRD_CONFIG_DIR:-/etc/bird}:/etc/bird
+      - ${EASYTIER_LOCAL_STATE_DIR:-/data/easybird/state}:/root/.local/share/easytier
     logging:
       driver: json-file
       options:

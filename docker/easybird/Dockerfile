@@ -4,7 +4,7 @@ FROM easytier/easytier:v2.6.4 AS dumper
 FROM alpine:latest
 
 RUN apk upgrade --no-cache && \
-    apk add --no-cache bash tzdata ca-certificates dbus \
+    apk add --no-cache bash tzdata ca-certificates \
     curl bind-tools iproute2 iperf3 iptables-legacy iptables nftables \
     vim jq bird supervisor py3-pip && \
     rm -f /etc/machine-id && \

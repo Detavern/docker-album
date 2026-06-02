@@ -4,7 +4,6 @@ set -euo pipefail
 
 # first run
 FIRST_RUN="/root/.firstrun"
-MACHINE_ID_FILE="/etc/machine-id"
 CRON_ROOT_FILE="/etc/crontabs/root"
 BIRD_TMPL_DIR="/root/templates"
 BIRD_CONF_DIR="/etc/bird"
@@ -39,16 +38,11 @@ if [ -n "${EASYTIER_CONFIG_FILE:-}" ]; then
     export EASYTIER_OPTIONS="-c ${EASYTIER_CONFIG_FILE}"
 fi
 
-if [ ! -f "${FIRST_RUN}" ]; then
-    # init machine-id
-    if [ ! -f "${MACHINE_ID_FILE}" ]; then
-        if [ -z "${MACHINE_ID:-}" ]; then
-            MACHINE_ID=$(dbus-uuidgen)
-            echo "MACHINE_ID not set, generated ${MACHINE_ID}"
-        fi
-        echo "${MACHINE_ID}" > ${MACHINE_ID_FILE}
-    fi
+if [ -n "${EASYTIER_EXTRA_OPTIONS:-}" ]; then
+    export EASYTIER_OPTIONS="${EASYTIER_OPTIONS} ${EASYTIER_EXTRA_OPTIONS}"
+fi
 
+if [ ! -f "${FIRST_RUN}" ]; then
     # init bird.conf
     if [ ! -f "${BIRD_CONF_FILE}" ]; then
         if [ ! -f "${BIRD_TMPL_FILE}" ]; then
