@@ -5,7 +5,7 @@ services:
     hostname: easytier-web
     container_name: easytier-web
     labels:
-      com.centurylinklabs.watchtower.enable: "true"
+      - com.centurylinklabs.watchtower.enable=true
     restart: unless-stopped
     networks:
       easytier:

@@ -5,7 +5,7 @@ services:
     hostname: ${EASYTIER_HOSTNAME:-easytier}
     container_name: easytier
     labels:
-      com.centurylinklabs.watchtower.enable: "true"
+      - com.centurylinklabs.watchtower.enable=true
     restart: unless-stopped
     network_mode: host
     cap_add:
@@ -18,10 +18,11 @@ services:
     volumes:
       - ${EASYTIER_LOCAL_STATE_DIR:-/data/easytier/state}:/root/.local/share/easytier
     command: -w ${EASYTIER_CONFIG_SERVER:-udp://config-server.easytier.cn:22020/admin}
+
     logging:
       driver: json-file
       options:
-        max-size: 50m
+        max-size: 10m
         max-file: 3
     deploy:
       resources:
