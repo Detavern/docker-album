@@ -3,12 +3,17 @@ FROM easytier/easytier:v2.6.4 AS dumper
 
 FROM alpine:latest
 
-RUN apk upgrade --no-cache && \
-    apk add --no-cache bash tzdata ca-certificates \
+RUN apk upgrade --no-cache \
+    && apk add --no-cache bash tzdata ca-certificates \
     curl bind-tools iproute2 iperf3 iptables-legacy iptables nftables \
-    vim jq bird supervisor py3-pip && \
-    rm -f /etc/machine-id && \
-    mkdir -p /etc/bird && mkdir -p /root/templates
+    vim jq bird supervisor py3-pip \
+    && mkdir -p /etc/bird \
+    && mkdir -p /root/templates
+
+ENV TZ=Etc/UTC
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
 
 COPY --from=dumper /usr/local/bin/* /usr/local/bin
 COPY service.ini /etc/supervisor.d/
