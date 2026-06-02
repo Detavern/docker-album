@@ -1,9 +1,9 @@
-name: komari-agent
+name: yahs-komari-agent
 services:
-  komari-agent:
+  yahs-komari-agent:
     image: ${KOMARI_AGENT_IMAGE:-ghcr.io/komari-monitor/komari-agent:latest}
-    hostname: komari-agent
-    container_name: komari-agent
+    hostname: yahs-komari-agent
+    container_name: yahs-komari-agent
     labels:
       - com.centurylinklabs.watchtower.enable=true
     restart: unless-stopped

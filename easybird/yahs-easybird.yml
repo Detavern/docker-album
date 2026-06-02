@@ -1,9 +1,9 @@
-name: easybird
+name: yahs-easybird
 services:
-  easybird:
+  yahs-easybird:
     image: ${EASYBIRD_IMAGE:-ghcr.io/detavern/easybird:latest}
-    hostname: ${EASYBIRD_HOSTNAME:-easybird}
-    container_name: easybird
+    hostname: yahs-easybird
+    container_name: yahs-easybird
     labels:
       - com.centurylinklabs.watchtower.enable=true
     restart: unless-stopped
