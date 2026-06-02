@@ -16,7 +16,7 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
-      - /etc/machine-id:/etc/machine-id:ro
+      - ${EASYTIER_LOCAL_STATE_DIR:-/data/easytier/state}:/root/.local/share/easytier
     command: -w ${EASYTIER_CONFIG_SERVER:-udp://config-server.easytier.cn:22020/admin}
     logging:
       driver: json-file

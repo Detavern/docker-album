@@ -17,6 +17,7 @@ services:
       - /dev/net/tun:/dev/net/tun
     volumes:
       - ${EASYTIER_CONFIG_DIR:-/etc/easytier}:/etc/easytier
+      - ${EASYTIER_LOCAL_STATE_DIR:-/data/easytier/state}:/root/.local/share/easytier
     command: -c /etc/easytier/config.toml
     logging:
       driver: json-file
