@@ -41,7 +41,7 @@ services:
       resources:
         limits:
           cpus: "1.0"
-          memory: ${UNIFI_MONGO_MEM_LIMIT:-768}mb
+          memory: ${UNIFI_MONGO_MEM_LIMIT:-1024}mb
 
 networks:
   unifi:
