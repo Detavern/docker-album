@@ -3,7 +3,7 @@ FROM debian:13.0
 
 # apt
 RUN apt-get update && \
-    apt-get install -y grep locales iproute2 iputils-ping openssh-server vim python3 pwgen && \
+    apt-get install -y grep locales iproute2 iputils-ping openssh-server tini vim python3 pwgen && \
     apt-get clean
 
 # sshd

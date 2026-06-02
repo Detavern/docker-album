@@ -62,4 +62,4 @@ if [ ! -f "${FIRST_RUN}" ]; then
     echo "${ROOT_PASSWORD}" > "${FIRST_RUN}"
 fi
 
-exec "$@"
+exec /usr/bin/tini -- "$@"
