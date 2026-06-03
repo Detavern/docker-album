@@ -4,7 +4,8 @@ set -euo pipefail
 
 # first run
 FIRST_RUN="/root/.firstrun"
-MACHINE_ID_FILE="/etc/machine-id"
+LOCAL_STATE_DIR="/root/.local/share/easytier"
+MACHINE_ID_FILE="${LOCAL_STATE_DIR}/machine_id"
 CRON_ROOT_FILE="/etc/crontabs/root"
 BIRD_TMPL_DIR="/root/templates"
 BIRD_CONF_DIR="/etc/bird"
@@ -40,10 +41,12 @@ if [ -n "${EASYTIER_CONFIG_FILE:-}" ]; then
 fi
 
 if [ ! -f "${FIRST_RUN}" ]; then
+    mkdir -p ${LOCAL_STATE_DIR}
+
     # init machine-id
     if [ ! -f "${MACHINE_ID_FILE}" ]; then
         if [ -z "${MACHINE_ID:-}" ]; then
-            MACHINE_ID=$(dbus-uuidgen)
+            MACHINE_ID=$(cat /proc/sys/kernel/random/uuid)
             echo "MACHINE_ID not set, generated ${MACHINE_ID}"
         fi
         echo "${MACHINE_ID}" > ${MACHINE_ID_FILE}
