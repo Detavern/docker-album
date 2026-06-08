@@ -1,7 +1,8 @@
-FROM --platform=${BUILDPLATFORM} alpine AS builder
+FROM --platform=${BUILDPLATFORM} alpine:latest AS builder
 
-ARG TARGETPLATFORM
+# @version
 ARG S6_OVERLAY_VERSION=3.2.3.0
+ARG TARGETPLATFORM
 
 WORKDIR /s6
 
