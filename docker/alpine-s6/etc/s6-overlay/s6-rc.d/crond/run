@@ -1,0 +1,7 @@
+#!/command/with-contenv bash
+
+if [ "${ENABLE_CRONTAB:-0}" = "1" ]; then
+    exec crond -f $CRONTAB_OPTIONS
+else
+    exec s6-svc -Od .
+fi
