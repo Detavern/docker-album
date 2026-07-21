@@ -1,9 +1,9 @@
-name: komari-monitor
+name: pot-komari
 services:
-  komari-monitor:
+  komari:
     image: ${KOMARI_IMAGE:-ghcr.io/komari-monitor/komari:latest}
-    hostname: komari-monitor
-    container_name: komari-monitor
+    hostname: komari
+    container_name: pot-komari
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
@@ -27,6 +27,16 @@ services:
     volumes:
       - ${KOMARI_DATA_DIR:-/data/komari}:/app/data
 
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - -qO-
+        - http://127.0.0.1:${KOMARI_LISTEN_PORT:-25774}/ready
+      start_period: 20s
+      interval: 10s
+      timeout: 5s
+      retries: 3
     logging:
       driver: json-file
       options:
