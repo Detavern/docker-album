@@ -49,6 +49,7 @@ if [ ! -f "${FIRST_RUN}" ]; then
         sed -i 's/^#\?\(PermitRootLogin\) .*/\1 prohibit-password/' /etc/ssh/sshd_config
         sed -i 's/^#\?\(PasswordAuthentication\) .*/\1 no/' /etc/ssh/sshd_config
     elif [ -n "${ROOT_PUBKEY}" ]; then
+        echo "env ROOT_PUBKEY is present"
         echo "${ROOT_PUBKEY}" > "${AUTH_FILE}"
         sed -i 's/^#\?\(PermitRootLogin\) .*/\1 prohibit-password/' /etc/ssh/sshd_config
         sed -i 's/^#\?\(PasswordAuthentication\) .*/\1 no/' /etc/ssh/sshd_config
